@@ -34,5 +34,10 @@
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --fix",
     "*.{js,ts,tsx,json,css,md}": "prettier --write"
+  },
+   "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
