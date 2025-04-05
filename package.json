@@ -11,7 +11,8 @@
     "check-types": "tsc --pretty --noEmit",
     "check-format": "prettier --check .",
     "check-lint": "eslint . --ext ts --ext tsx --ext js",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky install"
   },
   "dependencies": {
     "lint-staged": "^15.5.0",
@@ -28,11 +29,17 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "^15.2.4",
+    "husky": "^9.1.7",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --fix",
     "*.{js,ts,tsx,json,css,md}": "prettier --write"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
