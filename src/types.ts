@@ -10,4 +10,4 @@ export interface NewsArticle {
     url: string;
 }
 
-export type Category = 'Technology' | 'Sports' | 'Business' | 'Entertainment' | 'Health' | 'Science';
+export type Category = 'Technology' | 'Sports' | 'Business' | 'Entertainment' | 'Health' | 'Science' | 'Gold';

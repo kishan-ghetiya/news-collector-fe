@@ -11,6 +11,7 @@ export default function Home() {
     "Entertainment",
     "Health",
     "Science",
+    "Gold",
   ];
 
   return (
