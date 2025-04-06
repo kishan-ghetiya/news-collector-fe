@@ -2,14 +2,125 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .category-badge {
-    @apply text-sm font-medium px-3 py-1 rounded-full;
-    background: linear-gradient(50deg, #003c9c, #814bff);
-    color: white;
-  }
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  font-family:
+    Helvetica Neue,
+    Arial,
+    sans-serif;
+  background-color: #dde7f5;
+  color: #666;
+}
+main {
+  display: block;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  color: #333;
+}
+a {
+  color: #3498db;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
 
-  .news-card {
-    @apply transform transition-transform duration-300 hover:-translate-y-1;
-  }
+/* Layout.css — containers, grid */
+.container {
+  @apply max-w-content mx-auto px-4;
+}
+.row {
+  @apply flex flex-wrap -mx-2;
+}
+.col {
+  @apply px-2;
+}
+
+.heading {
+  @apply text-3xl font-bold text-heading mb-4;
+}
+.subheading {
+  @apply text-xl text-heading mb-2;
+}
+.paragraph {
+  @apply text-base text-text mb-4 leading-relaxed;
+}
+
+/* Buttons */
+.btn {
+  @apply inline-block bg-primary text-white font-semibold px-4 py-2 rounded-md transition hover:bg-blue-700;
+}
+.btn-secondary {
+  @apply bg-secondary hover:bg-green-700;
+}
+.btn-danger {
+  @apply bg-danger hover:bg-red-700;
+}
+.btn-sm {
+  @apply text-sm px-2 py-1;
+}
+.btn-lg {
+  @apply text-lg px-6 py-3;
+}
+
+/* Forms */
+input,
+textarea,
+select {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  @apply outline-none ring-1 ring-blue-300 border-blue-500;
+}
+label {
+  @apply block mb-1 font-medium text-heading;
+}
+.form-group {
+  @apply mb-4;
+}
+
+/* Cards */
+.card {
+  @apply bg-white shadow p-6 rounded-lg;
+}
+.card-header {
+  @apply text-xl font-semibold mb-2 text-heading;
+}
+.card-body {
+  @apply text-base text-text;
+}
+
+/* Navigation */
+.navbar {
+  @apply flex items-center justify-between px-6 py-4 bg-white shadow;
+}
+.nav-link {
+  @apply text-text hover:text-primary px-3 py-2;
+}
+
+/* Footer */
+.footer {
+  @apply text-sm text-muted text-center py-6;
 }

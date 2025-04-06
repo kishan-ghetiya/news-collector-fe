@@ -1,5 +1,3 @@
-import typographyPlugin from "@tailwindcss/typography";
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -11,19 +9,62 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#0F172A",
-        secondary: "#3B82F6",
-        accent: "#6366F1",
-        surface: "#F8FAFC",
-        onSurface: "#1E293B",
+        primary: "#3498db",
+        secondary: "#2ecc71",
+        danger: "#e74c3c",
+        muted: "#999",
+        background: "#f9f9f9",
+        heading: "#333",
+        text: "#666",
+        light: "#f1f1f1",
+        dark: "#222",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "sans-serif"],
+        sans: ["Helvetica Neue", "Arial", "sans-serif"],
+        serif: ["Georgia", "serif"],
       },
-      animation: {
-        "fade-in": "fadeIn 0.3s ease-in",
+      fontSize: {
+        "2xs": "0.625rem",
+        xs: "0.75rem",
+        sm: "0.875rem",
+        base: "1rem",
+        md: "1.125rem",
+        lg: "1.25rem",
+        xl: "1.5rem",
+        "2xl": "2rem",
+        "3xl": "3rem",
+      },
+      spacing: {
+        1: "0.25rem",
+        2: "0.5rem",
+        3: "0.75rem",
+        4: "1rem",
+        5: "1.25rem",
+        6: "1.5rem",
+        8: "2rem",
+        10: "2.5rem",
+        12: "3rem",
+        16: "4rem",
+        24: "6rem",
+      },
+      maxWidth: {
+        content: "1200px",
+        narrow: "800px",
+      },
+      screens: {
+        xs: "480px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+      },
+      borderRadius: {
+        sm: "0.125rem",
+        md: "0.375rem",
+        lg: "0.5rem",
+        xl: "0.75rem",
       },
     },
   },
-  plugins: [typographyPlugin],
+  plugins: [],
 };
