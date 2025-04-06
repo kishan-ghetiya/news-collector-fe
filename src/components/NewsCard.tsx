@@ -46,7 +46,7 @@ export default function NewsCard({ article }: { article: NewsArticle }) {
         </div>
 
         <h3 className="text-xl font-semibold leading-7 hover:text-secondary transition-colors">
-          <a href={article.url} target="_blank" rel="noopener noreferrer">
+          <a href={article.url} target="_blank" rel="noopener noreferrer ">
             {article.title}
           </a>
         </h3>
