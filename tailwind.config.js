@@ -18,6 +18,7 @@ const config = {
         text: "#666",
         light: "#f1f1f1",
         dark: "#222",
+        purple: "#6A0DAD",
       },
       fontFamily: {
         sans: ["Helvetica Neue", "Arial", "sans-serif"],
