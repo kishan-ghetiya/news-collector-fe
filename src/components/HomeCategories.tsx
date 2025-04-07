@@ -1,5 +1,3 @@
-// components/HomeCategories.tsx
-
 import Image from "next/image";
 
 const categories = [

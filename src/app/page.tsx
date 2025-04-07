@@ -1,4 +1,4 @@
-import HomeCategories from "./components/HomeCategories";
+import HomeCategories from "@/components/HomeCategories";
 
 export default function Home() {
   return (

@@ -9,15 +9,22 @@ const config = {
   theme: {
     extend: {
       colors: {
-        primary: "#3498db",
-        secondary: "#2ecc71",
-        danger: "#e74c3c",
-        muted: "#999",
-        background: "#f9f9f9",
-        heading: "#333",
-        text: "#666",
-        light: "#f1f1f1",
-        dark: "#222",
+        primary: {
+          DEFAULT: "#FFD700",
+          dark: "#FFC300",
+        },
+        secondary: {
+          DEFAULT: "#000000",
+          light: "#1A1A1A",
+        },
+        accent: {
+          DEFAULT: "#666666",
+          light: "#999999",
+        },
+        neutral: {
+          DEFAULT: "#F5F5F5",
+          dark: "#E5E5E5",
+        },
         purple: "#6A0DAD",
       },
       fontFamily: {
