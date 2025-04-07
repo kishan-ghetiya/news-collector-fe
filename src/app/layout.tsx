@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "./components/Header";
-
+import Header from "@/components/Header";
+import Providers from "@/providers";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -10,10 +10,6 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "News Collector App",
   description: "A news collector app",
-  icons: {
-    icon: "/public/favicon.png",
-    apple: "/public/webclip.png",
-  },
 };
 
 export default function RootLayout({
@@ -33,7 +29,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <Header />
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
