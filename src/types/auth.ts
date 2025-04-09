@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export interface RegisterPayload {
     email: string;
     password: string;
@@ -21,4 +23,11 @@ export interface ChangePasswordPayload {
 export interface TokenResponse {
     accessToken: string;
     refreshToken: string;
+}
+
+
+export interface AuthResponse {
+    token: string;
+    refreshToken: string;
+    user: User;
 }

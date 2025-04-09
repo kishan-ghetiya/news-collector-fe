@@ -1,6 +1,7 @@
-import React from "react";
+import AuthForm from "@/components/forms/AuthForm";
+import FormContainer from "@/components/ui/FormContainer";
 import { Metadata } from "next";
-import LoginForm from "./LoginForm";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -9,9 +10,15 @@ export const metadata: Metadata = {
 
 const page = () => {
   return (
-    <div className="flex flex-col justify-center items-center py-5">
-      <LoginForm />
-    </div>
+    <FormContainer title="Welcome Back">
+      <AuthForm type="login" />
+      <div className="mt-6 text-center">
+        <span className="text-accent">Don&apos;t have an account? </span>
+        <Link href="/register" className="text-purple hover:text-purple-800">
+          Register
+        </Link>
+      </div>
+    </FormContainer>
   );
 };
 

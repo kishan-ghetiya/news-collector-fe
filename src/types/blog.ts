@@ -16,3 +16,19 @@ export interface BookmarkPayload {
     linkId: string[];
     status: boolean;
 }
+
+export interface Blog {
+    id: string;
+    title: string;
+    link: string;
+    tags: string[];
+    summary: string;
+    createdAt: string;
+}
+
+export interface BlogListResponse {
+    data: Blog[];
+    total: number;
+    page: number;
+    limit: number;
+}

@@ -9,6 +9,13 @@ const config = {
   theme: {
     extend: {
       colors: {
+        frenzy: {
+          dark: "#0a0a0a",
+          primary: "#c5a47e",
+          secondary: "#1f1f1f",
+          accent: "#2d2d2d",
+          text: "#ffffff",
+        },
         primary: {
           DEFAULT: "#FFD700",
           dark: "#FFC300",
@@ -26,6 +33,10 @@ const config = {
           dark: "#E5E5E5",
         },
         purple: "#6A0DAD",
+        danger: {
+          DEFAULT: "#DC2626",
+          light: "#FECACA",
+        },
       },
       fontFamily: {
         sans: ["Helvetica Neue", "Arial", "sans-serif"],
