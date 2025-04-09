@@ -1,6 +1,3 @@
-// components/CategoryMarquee.tsx
-import Image from "next/image";
-
 const categories = [
   { name: "Business", icon: "/categories/business.png" },
   { name: "Sport", icon: "/categories/sport.png" },

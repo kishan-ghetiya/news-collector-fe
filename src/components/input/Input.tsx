@@ -1,6 +1,4 @@
-import Image from "next/image";
-import { FC, useState, ChangeEvent } from "react";
-import Head from "next/head";
+import { FC, ChangeEvent } from "react";
 
 // Generic Input component
 interface InputProps {
