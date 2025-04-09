@@ -43,9 +43,9 @@ const Header: React.FC = () => {
             </nav>
 
             <div className="hidden md:flex gap-4">
-              <Button variant="outline">
-                <Link href="/login">Sign In</Link>
-              </Button>
+              <Link href="/login">
+                <Button variant="outline">Sign In</Button>
+              </Link>
               <Link href="/register">
                 <Button>Register</Button>
               </Link>

@@ -1,4 +1,10 @@
 import Image from "next/image";
+import LatestBlogSection from "./blog/latestblog";
+import BlogCardSection from "./blog/blogCard";
+import CategoryMarquee from "./category/categoryMarquee";
+import ArticlesSection from "./articles/articles";
+import LatestNewsCategory from "./category/latestNews";
+import MixedSection from "./post/post";
 
 const categories = [
   { name: "Entertainment", img: "/post16.jpg" },
@@ -14,7 +20,7 @@ const categories = [
 export default function HomeCategories() {
   return (
     <section className="py-12">
-      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-6">
         {categories.map((category, index) => (
           <a
             key={index}
@@ -27,7 +33,7 @@ export default function HomeCategories() {
               height={192}
               width={256}
               loading="lazy"
-              className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+              className="w-full h-36 object-cover transition-transform duration-500 group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
             <div className="absolute bottom-4 left-4 z-20 text-white font-semibold text-lg">
@@ -44,6 +50,18 @@ export default function HomeCategories() {
           </a>
         ))}
       </div>
+
+      <LatestBlogSection />
+
+      <BlogCardSection />
+
+      <CategoryMarquee />
+
+      <ArticlesSection />
+
+      <LatestNewsCategory />
+
+      <MixedSection />
     </section>
   );
 }

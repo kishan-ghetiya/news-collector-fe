@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { nonAuthRoutes } from "@/components/utills";
+import Footer from "@/components/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,6 +32,8 @@ export default function RootLayout({
       <body className={inter.className}>
         {!nonAuthRoutes.includes(pathname) && <Header />}
         {children}
+        {!nonAuthRoutes.includes(pathname) && <Footer />}{" "}
+        {/* ✅ Show Footer only on authenticated pages */}
       </body>
     </html>
   );
