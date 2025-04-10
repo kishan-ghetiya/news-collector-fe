@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect } from "react";
 
 const authors = [
   {
@@ -26,20 +27,51 @@ const authors = [
 ];
 
 export default function AboutAndAuthors() {
+  useEffect(() => {
+    const elements = document.querySelectorAll(".scroll-fade-in");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.remove("opacity-0", "translate-y-10");
+            entry.target.classList.add("opacity-100", "translate-y-0");
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+
+    // Cleanup observer on component unmount
+    return () => {
+      elements.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
+
   return (
-    <div className="bg-[#dce6f6] text-gray-900">
+    <div className="bg-[#dce6f6] text-gray-900 opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
       {/* About Section */}
-      <section className="max-w-6xl mx-auto px-4 py-16 flex flex-col lg:flex-row items-center gap-10">
+      <section className="container mx-auto px-4 py-16 flex flex-col lg:flex-row items-center gap-10">
         <div className="flex-1">
           <div className="flex items-start gap-4 mb-4">
-            <Image src="/socials_22.png" alt="" width={40} height={40} />
-            <p className="text-2xl font-semibold">
-              We're powered by our unwavering devotion to crafting engaging
+            <Image
+              src="/socials_22.png"
+              alt=""
+              width={100}
+              height={100}
+              className="w-28 h-28"
+            />
+            <p className="text-2xl font-normal ml-6">
+              We&apos;re powered by our unwavering devotion to crafting engaging
               content, exploring fresh perspectives, and embracing the forefront
               of literary exploration.
             </p>
           </div>
-          <p className="text-lg text-gray-700">
+          <hr className="bg-black h-px my-10" />
+          <p className="text-lg text-gray-700 border-t-2">
             We thrive on crafting compelling content, exploring new
             perspectives, and pushing literary boundaries with unwavering
             dedication.

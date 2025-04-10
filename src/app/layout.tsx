@@ -2,14 +2,16 @@
 
 import Header from "@/components/Header";
 import { usePathname } from "next/navigation";
-import { Inter } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 import { nonAuthRoutes } from "@/components/utills";
 import Footer from "@/components/Footer";
 
-const inter = Inter({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "600", "700"], // Optional: define the weights you need
+  variable: "--font-manrope",
+  display: "swap",
 });
 
 export default function RootLayout({
@@ -29,7 +31,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className={inter.className}>
+      <body className={manrope.className}>
         {!nonAuthRoutes.includes(pathname) && <Header />}
         {children}
         {!nonAuthRoutes.includes(pathname) && <Footer />}{" "}

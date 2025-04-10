@@ -41,7 +41,7 @@ hr {
 
 @layer utilities {
   .animate-marquee {
-    animation: marquee 40s linear infinite;
+    animation: marquee 10s linear infinite;
   }
 
   @keyframes marquee {

@@ -5,7 +5,7 @@ import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import Button from "../ui/Button";
 import { useRouter } from "next/navigation";
-import { AuthResponse, LoginPayload, RegisterPayload } from "@/types/auth";
+import { LoginPayload, RegisterPayload } from "@/types/auth";
 import { authService } from "@/app/services";
 
 interface AuthFormProps {

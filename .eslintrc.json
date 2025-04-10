@@ -3,6 +3,7 @@
   "ignorePatterns": ["dist"],
   "rules": {
     "@next/next/no-sync-scripts": "off",
-    "react/no-find-dom-node": "off"
+    "react/no-find-dom-node": "off",
+    "@typescript-eslint/no-explicit-any": "warn"
   }
 }

@@ -1,3 +1,5 @@
+import { AuthResponse } from "@/types/auth";
+
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST;
 const API_VERSION = process.env.NEXT_PUBLIC_API_VERSION;
 
@@ -5,7 +7,7 @@ const apiClient = async <T>(
   endpoint: string,
   options: Omit<RequestInit, "body"> & {
     params?: Record<string, string | number | boolean | null | undefined>;
-    body?: any;
+    body?: AuthResponse;
   } = {}
 ): Promise<T> => {
   const url = new URL(`${API_HOST}/${API_VERSION}/${endpoint}`);

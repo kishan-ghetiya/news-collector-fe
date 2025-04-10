@@ -33,14 +33,14 @@ const subPosts = [
 
 const LatestNewsCategory = () => {
   return (
-    <section className="bg-[#dce6f6] py-20">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="bg-[#dce6f6] py-20 opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
+      <div className="container mx-auto px-4">
         {/* Title */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-800 capitalize">
+        <div className="text-center mb-12 flex items-center">
+          <h2 className="text-[90px] font-normal text-gray-800 capitalize">
             Education
           </h2>
-          <p className="text-gray-500 mt-2 text-lg">
+          <p className="text-gray-500 mt-2 text-lg ml-5">
             latest news about technology
           </p>
         </div>
@@ -57,10 +57,10 @@ const LatestNewsCategory = () => {
               alt={mainPost.title}
               width={800}
               height={500}
-              className="w-full h-[400px] object-cover group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
-            <div className="absolute bottom-0 bg-black/60 text-white p-6 w-full">
-              <h2 className="text-xl font-semibold">{mainPost.title}</h2>
+            <div className="absolute mx-5 rounded-2xl top-auto right-0 bottom-[20px] left-0 bg-white text-black p-6">
+              <h2 className="text-2xl font-normal">{mainPost.title}</h2>
             </div>
           </a>
 
@@ -70,7 +70,7 @@ const LatestNewsCategory = () => {
               <a
                 key={index}
                 href={post.link}
-                className="flex items-center gap-4 group hover:bg-gray-50 p-2 rounded-lg transition"
+                className="flex items-center gap-4 group hover:bg-gray-50 bg-white p-2 rounded-lg transition"
               >
                 <div className="relative w-32 h-24 flex-shrink-0 rounded-lg overflow-hidden">
                   <Image
@@ -80,7 +80,7 @@ const LatestNewsCategory = () => {
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <h4 className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition">
+                <h4 className="text-lg font-medium text-gray-800 transition group-hover:scale-105">
                   {post.title}
                 </h4>
               </a>

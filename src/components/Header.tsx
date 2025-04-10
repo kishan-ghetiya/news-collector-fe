@@ -9,7 +9,7 @@ const Header: React.FC = () => {
 
   return (
     <header>
-      <div className="max-w-7xl mx-auto mt-14 px-4">
+      <div className="container mx-auto mt-14 px-4">
         <div className="flex items-center justify-between h-20 shadow-lg bg-white rounded-xl px-4 sm:px-6 lg:px-8 transition-all duration-300 hover:shadow-xl">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
