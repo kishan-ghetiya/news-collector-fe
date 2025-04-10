@@ -8,6 +8,20 @@ const config = {
   ],
   theme: {
     extend: {
+      container: {
+        center: true,
+      },
+      container: {
+        center: true, // Center the container on the page
+        padding: {
+          DEFAULT: "1rem",
+          sm: "1rem",
+          md: "2rem",
+          lg: "2rem",
+          xl: "2.5rem",
+          "2xl": "2.5rem",
+        }, // Add consistent padding for all breakpoints
+      },
       colors: {
         frenzy: {
           dark: "#0a0a0a",
@@ -82,6 +96,18 @@ const config = {
         md: "0.375rem",
         lg: "0.5rem",
         xl: "0.75rem",
+      },
+      fontFamily: {
+        sans: ["Manrope", "sans-serif"], // Global default
+      },
+      keyframes: {
+        typing: {
+          "0%": { width: "0%" },
+          "100%": { width: "100%" },
+        },
+      },
+      animation: {
+        typing: "typing 2s steps(20) forwards",
       },
     },
   },

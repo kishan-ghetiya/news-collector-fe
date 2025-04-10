@@ -6,8 +6,8 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="bg-[url('/footer-bg.jpg')] bg-cover bg-center bg-no-repeat">
-      <div className="py-[150px] pb-[110px]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+      <div className="py-16 pb-[80px]">
+        <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
           {/* Contact Section */}
           <div className="bg-white rounded-2xl p-6 flex flex-col">
             <h4 className="uppercase font-medium underline text-lg mb-4">
@@ -93,11 +93,11 @@ export default function Footer() {
       </div>
 
       {/* Copyright */}
-      <div className="bg-black text-white py-4">
-        <div className="max-w-7xl mx-auto px-4 text-center text-sm">
-          © 2024 Frenzy - HTML Template. Made by{" "}
-          <Link href="#" className="underline">
-            Max Themes
+      <div className="py-4 rounded-full container px-4">
+        <div className="container mx-auto text-center text-sm bg-black text-white rounded-full px-4 py-6">
+          © 2024
+          <Link href="#" className="underline ml-2">
+            News collector
           </Link>
         </div>
       </div>

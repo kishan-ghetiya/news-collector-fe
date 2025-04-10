@@ -35,8 +35,8 @@ const blogData: BlogCard[] = [
 
 const BlogCardSection = () => {
   return (
-    <section className="bg-[#dce6f6] py-10">
-      <div className="max-w-7xl mx-auto px-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="bg-[#dce6f6] py-10 pb-40 opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
+      <div className="container mx-auto px-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {blogData.map((blog, index) => (
           <a
             key={index}

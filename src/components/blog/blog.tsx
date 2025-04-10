@@ -1,5 +1,6 @@
-// components/BlogSection.tsx
+"use client";
 import Image from "next/image";
+import { useEffect } from "react";
 
 interface BlogItem {
   id: number;
@@ -34,9 +35,33 @@ const blogData: BlogItem[] = [
 ];
 
 export default function BlogSection() {
+  useEffect(() => {
+    const elements = document.querySelectorAll(".scroll-fade-in");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.remove("opacity-0", "translate-y-10");
+            entry.target.classList.add("opacity-100", "translate-y-0");
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+
+    // Cleanup observer on component unmount
+    return () => {
+      elements.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
+
   return (
-    <section className="py-16 bg-[#dce6f6]">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="py-16 bg-[#dce6f6] opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
+      <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogData.map((item) => (
             <a

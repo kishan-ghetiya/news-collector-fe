@@ -44,37 +44,61 @@ const Articles = [
 export default function ArticlesSection() {
   return (
     <section
-      className="py-16 bg-cover bg-no-repeat bg-center"
+      className="py-40 bg-cover bg-no-repeat bg-center opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in"
       style={{ backgroundImage: "url('/post-bg.jpg')" }}
     >
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-10">
-          <h2 className="text-4xl font-bold text-white">Tech</h2>
-          <p className="text-lg text-white/70 mt-2">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-10 flex items-center gap-4">
+          <h2 className="text-[90px] font-normal text-black">Tech</h2>
+          <p className="text-lg text-black/70 mt-2">
             latest news about technology
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {Articles.map((article, index) => (
+            // <div className="flex items-center bg-white rounded-[40px] p-4 shadow-md space-x-4 w-full max-w-xl" key={index}>
+            //   <div className="flex-shrink-0 flex items-center break-words w-full">
+            //     <Image
+            //       src={article.image}
+            //       alt={article.title}
+            //       width={600}
+            //       height={400}
+            //       className="w-20 h-20 rounded-full object-cover transition-transform duration-300 group-hover:scale-105"
+            //     />
+            //       <div className="ml-4">
+            //       <h4 className="text-lg font-normal text-gray-900 ">
+            //         {article.title}
+            //       </h4>
+            //       <p className="text-sm text-gray-500">{article.date}</p>
+            //     </div>
+            //   </div>
+            // </div>
             <a
-              key={index}
               href="/singleblog.html"
-              className="relative group overflow-hidden rounded-xl shadow-lg"
+              className="relative group overflow-hidden rounded-[40px] shadow-lg"
+              key={index}
             >
-              <Image
-                src={article.image}
-                alt={article.title}
-                width={600}
-                height={400}
-                className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="absolute bottom-4 left-4 right-4 z-10">
-                <h4 className="text-white text-lg font-semibold">
-                  {article.title}
+              {/* Animated image zoom-in */}
+              <div className="relative w-full h-64 overflow-hidden">
+                <Image
+                  src={article.image}
+                  alt={article.title}
+                  width={600}
+                  height={400}
+                  className="w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-[400ms] ease-in-out"
+                />
+
+                {/* Overlay that fades in on hover */}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+
+              {/* Text content sliding in */}
+              <div className="absolute bottom-6 left-6 right-6 z-10 transform translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
+                <h4 className="text-white text-xl font-semibold">
+                  Future Forward: Technology’s Evolution Unveiled
                 </h4>
-                <p className="text-white text-sm">{article.date}</p>
+                <p className="text-white text-sm mt-1">December 12, 2023</p>
               </div>
             </a>
           ))}
