@@ -1,12 +1,12 @@
 "use client";
+import { authService } from "@/app/services";
+import { LoginPayload, RegisterPayload } from "@/types/auth";
+import { joiResolver } from "@hookform/resolvers/joi";
+import Joi from "joi";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import Joi from "joi";
-import { joiResolver } from "@hookform/resolvers/joi";
 import Button from "../ui/Button";
-import { useRouter } from "next/navigation";
-import { AuthResponse, LoginPayload, RegisterPayload } from "@/types/auth";
-import { authService } from "@/app/services";
 
 interface AuthFormProps {
   type: "login" | "register";
@@ -47,10 +47,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
   });
 
   const handleAuthSuccess = (data: any) => {
-    console.log(data);
-    localStorage.setItem("accessToken", data.token);
-    localStorage.setItem("refreshToken", data.refreshToken);
-    router.push("/");
+    if (type === "register") {
+      router.push(
+        `/verify-email?userId=${data.user.id}&verificationCode=${data.user.verificationCode}`
+      );
+    } else {
+      router.push("/");
+    }
   };
 
   const onSubmit = async (formData: FormData) => {
@@ -62,15 +65,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
         const { data } = await authService.login(formData);
         handleAuthSuccess(data);
       } else {
-        const { data } = await authService.register(
-          formData as RegisterPayload
-        );
+        const data = await authService.register(formData as RegisterPayload);
+        console.log(data);
         handleAuthSuccess(data);
       }
     } catch (error: any) {
-      setApiError(
-        error.response?.data?.message || "An unexpected error occurred"
-      );
+      setApiError(error?.message || "An unexpected error occurred");
     } finally {
       setIsLoading(false);
     }

@@ -1,1 +1,1 @@
-export const nonAuthRoutes = ["/register", "/login"];
+export const nonAuthRoutes = ["/register", "/login", "/verify-email"];
