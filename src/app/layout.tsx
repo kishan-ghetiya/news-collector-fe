@@ -1,11 +1,6 @@
-"use client";
-
-import Header from "@/components/Header";
-import { usePathname } from "next/navigation";
 import { Manrope } from "next/font/google";
 import "./globals.css";
-import { nonAuthRoutes } from "@/components/utills";
-import Footer from "@/components/Footer";
+import LayoutWrapper from "@/components/LayoutWrapper";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -14,12 +9,16 @@ const manrope = Manrope({
   display: "swap",
 });
 
+export const metadata = {
+  title: "Your App Title",
+  description: "Your App Description",
+};
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
 
   return (
     <html lang="en">
@@ -32,10 +31,7 @@ export default function RootLayout({
         />
       </head>
       <body className={manrope.className}>
-        {!nonAuthRoutes.includes(pathname) && <Header />}
-        {children}
-        {!nonAuthRoutes.includes(pathname) && <Footer />}{" "}
-        {/* ✅ Show Footer only on authenticated pages */}
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );
