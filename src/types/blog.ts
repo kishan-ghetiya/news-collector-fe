@@ -12,11 +12,6 @@ export interface BlogResponse {
   updatedAt: string;
 }
 
-export interface BookmarkPayload {
-  linkId: string[];
-  status: boolean;
-}
-
 export interface Blog {
   id: string;
   title: string;

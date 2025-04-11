@@ -1,4 +1,4 @@
-import { Blog, BlogListResponse, BookmarkPayload } from "@/types/blog";
+import { Blog, BlogListResponse } from "@/types/blog";
 import apiClient from "../lib/apiClient";
 
 export const blogService = {
@@ -30,11 +30,11 @@ export const blogService = {
       params: { page, limit },
     }),
 
-  bookmarkBlog: (data: BookmarkPayload) =>
-    apiClient<void>("blog/bookmark", {
-      method: "POST",
-      body: data,
-    }),
+  // bookmarkBlog: (data: BookmarkPayload) =>
+  //   apiClient<void>("blog/bookmark", {
+  //     method: "POST",
+  //     body: data,
+  //   }),
 
   getBookmarks: (page: number = 1, limit: number = 10) =>
     apiClient<BlogListResponse>("blog/bookmarks/get", {
