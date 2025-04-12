@@ -1,14 +1,6 @@
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST;
 const API_VERSION = process.env.NEXT_PUBLIC_API_VERSION;
 
-const unauthenticatedEndpoints = [
-  "auth/login",
-  "auth/register",
-  "auth/send-verification-email",
-  "auth/verify-email",
-  "auth/refresh-tokens",
-];
-
 const apiClient = async <T>(
   endpoint: string,
   options: Omit<RequestInit, "body"> & {
@@ -17,6 +9,7 @@ const apiClient = async <T>(
   } = {}
 ): Promise<T> => {
   const url = new URL(`${API_HOST}/${API_VERSION}/${endpoint}`);
+  const token = localStorage.getItem("accessToken");
 
   if (options.params) {
     Object.entries(options.params).forEach(([key, value]) => {
@@ -27,10 +20,8 @@ const apiClient = async <T>(
   }
 
   const headers = new Headers(options.headers);
-  const isUnauthenticated = unauthenticatedEndpoints.includes(endpoint);
 
-  if (!isUnauthenticated) {
-    const token = localStorage.getItem("accessToken");
+  if (token) {
     if (!token) throw new Error("No access token found");
     headers.append("Authorization", `Bearer ${token}`);
   }
@@ -45,16 +36,19 @@ const apiClient = async <T>(
     body: options.body ? JSON.stringify(options.body) : null,
   });
 
-  if (response.status === 401 && !isUnauthenticated) {
+  if (response.status === 401) {
     const refreshToken = localStorage.getItem("refreshToken");
     if (!refreshToken) throw new Error("Refresh token not found");
 
     try {
-      const refreshResponse = await fetch(`${API_HOST}/${API_VERSION}/auth/refresh-tokens`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refreshToken }),
-      });
+      const refreshResponse = await fetch(
+        `${API_HOST}/${API_VERSION}/auth/refresh-tokens`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refreshToken }),
+        }
+      );
 
       if (!refreshResponse.ok) {
         throw new Error("Failed to refresh tokens");
@@ -75,12 +69,14 @@ const apiClient = async <T>(
 
       if (!retryResponse.ok) {
         const errorData = await retryResponse.json();
-        throw new Error(errorData?.message || "Retry failed", { cause: errorData });
+        throw new Error(errorData?.message || "Retry failed", {
+          cause: errorData,
+        });
       }
 
       return retryResponse.json() as Promise<T>;
     } catch (err) {
-      console.log(err)
+      console.log(err);
       localStorage.clear();
       throw new Error("Token refresh failed. Please login again.");
     }
@@ -88,7 +84,9 @@ const apiClient = async <T>(
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData?.message || "API request failed", { cause: errorData });
+    throw new Error(errorData?.message || "API request failed", {
+      cause: errorData,
+    });
   }
 
   return response.json() as Promise<T>;

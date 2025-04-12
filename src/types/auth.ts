@@ -21,22 +21,21 @@ export interface ChangePasswordPayload {
 }
 
 export interface TokenResponse {
-  accessToken: string;
-  refreshToken: string;
+  access: { token: string };
+  refresh: { token: string };
 }
 
 export interface AuthResponse {
   tokens: {
     access: {
-      token: string; 
-      expires: string; 
+      token: string;
+      expires: string;
     };
     refresh: {
-      token: string; 
-      expires: string; 
+      token: string;
+      expires: string;
     };
   };
-  user: User; 
-  data?: string; 
+  user: User;
+  data?: string;
 }
-

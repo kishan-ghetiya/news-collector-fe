@@ -26,22 +26,17 @@ export const ContactForm: FC = () => {
         "string.empty": "Email is required",
         "any.required": "Email is required",
       }),
-  
-    name: Joi.string()
-      .required()
-      .messages({
-        "string.empty": "Name is required",
-        "any.required": "Name is required",
-      }),
-  
-    message: Joi.string()
-      .required()
-      .messages({
-        "string.empty": "Message is required",
-        "any.required": "Message is required",
-      }),
+
+    name: Joi.string().required().messages({
+      "string.empty": "Name is required",
+      "any.required": "Name is required",
+    }),
+
+    message: Joi.string().required().messages({
+      "string.empty": "Message is required",
+      "any.required": "Message is required",
+    }),
   });
-  
 
   const {
     register,
