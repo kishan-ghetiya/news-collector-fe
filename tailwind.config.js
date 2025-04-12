@@ -88,6 +88,15 @@ const config = {
         lg: "1024px",
         xl: "1280px",
       },
+      borderWidth: {
+        DEFAULT: "0.0625rem",
+        1: "1px",
+        2: "2px",
+        3: "0.1875rem",
+        4: "0.25rem",
+        8: "0.5rem",
+        5: "5px",
+      },
       borderRadius: {
         sm: "0.125rem",
         md: "0.375rem",
