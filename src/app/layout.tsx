@@ -10,8 +10,9 @@ const manrope = Manrope({
 });
 
 export const metadata = {
-  title: "Your App Title",
-  description: "Your App Description",
+  title: "New Collector App",
+  description:
+    "News Collector App aggregates and displays the latest news from various sources. Users can explore articles by categories and tags for a tailored reading experience.",
 };
 
 export default function RootLayout({
@@ -19,7 +20,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html lang="en">
       <head>

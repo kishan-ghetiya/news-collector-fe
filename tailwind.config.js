@@ -9,9 +9,6 @@ const config = {
   theme: {
     extend: {
       container: {
-        center: true,
-      },
-      container: {
         center: true, // Center the container on the page
         padding: {
           DEFAULT: "1rem",
@@ -53,7 +50,7 @@ const config = {
         },
       },
       fontFamily: {
-        sans: ["Helvetica Neue", "Arial", "sans-serif"],
+        sans: ["Manrope", "Helvetica Neue", "Arial", "sans-serif"],
         serif: ["Georgia", "serif"],
       },
       fontSize: {
@@ -96,9 +93,6 @@ const config = {
         md: "0.375rem",
         lg: "0.5rem",
         xl: "0.75rem",
-      },
-      fontFamily: {
-        sans: ["Manrope", "sans-serif"], // Global default
       },
       keyframes: {
         typing: {

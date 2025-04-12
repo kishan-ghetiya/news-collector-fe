@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "../ui/Button";
+import { Input } from "../input/Input";
+import toast from "react-hot-toast";
 
 interface AuthFormProps {
   type: "login" | "register";
@@ -16,8 +18,11 @@ interface FormData extends LoginPayload, RegisterPayload {}
 
 const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<null | "register" | "sendEmail">(
+    null
+  );
   const [apiError, setApiError] = useState<string | null>(null);
+  const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
 
   const schema = Joi.object<FormData>({
     email: Joi.string()
@@ -41,97 +46,121 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<FormData>({
     resolver: joiResolver(schema),
   });
 
-  const handleAuthSuccess = (data: any) => {
+  const handleAuthSuccess = () => {
     if (type === "register") {
-      router.push(
-        `/verify-email?userId=${data.user.id}&verificationCode=${data.user.verificationCode}`
-      );
+      router.push(`/verify-email?email=${watch("email")}`);
     } else {
       router.push("/");
     }
   };
 
   const onSubmit = async (formData: FormData) => {
-    setIsLoading(true);
+    setIsLoading("register");
     setApiError(null);
+    setIsRegistered(null);
 
     try {
       if (type === "login") {
-        const { data } = await authService.login(formData);
-        handleAuthSuccess(data);
+        await authService.login(formData);
+        handleAuthSuccess();
       } else {
-        const data = await authService.register(formData as RegisterPayload);
-        console.log(data);
-        handleAuthSuccess(data);
+        await authService.register(formData as RegisterPayload);
+        handleAuthSuccess();
       }
     } catch (error: any) {
+      const cause = error?.cause;
+
+      if (cause?.isRegistered === false) {
+        setIsRegistered(false);
+      }
+
       setApiError(error?.message || "An unexpected error occurred");
     } finally {
-      setIsLoading(false);
+      setIsLoading(null);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    const email = watch("email");
+
+    if (!email) return;
+
+    try {
+      setIsLoading("sendEmail");
+      await authService.sendVerificationEmail(email);
+      toast.success("Verification email sent. Please check your inbox.");
+      router.push(`/verify-email?email=${email}`);
+    } catch (error: any) {
+      setApiError(
+        error?.message || "Failed to resend verification email. Try again."
+      );
+    } finally {
+      setIsLoading(null);
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {type === "register" && (
-        <div>
-          <label className="block text-sm font-medium text-accent mb-2">
-            Full Name
-          </label>
-          <input
-            {...register("fullName")}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple focus:border-transparent"
-          />
-          {errors.fullName && (
-            <p className="text-danger text-sm mt-1">
-              {errors.fullName.message}
-            </p>
+        <Input
+          label="Full Name"
+          type="text"
+          placeholder="John Doe"
+          error={errors.fullName?.message}
+          variant="solid"
+          {...register("fullName")}
+        />
+      )}
+
+      <Input
+        label="Email"
+        type="email"
+        placeholder="you@example.com"
+        error={errors.email?.message}
+        variant="solid"
+        {...register("email")}
+      />
+
+      <Input
+        label="Password"
+        type="password"
+        placeholder="••••••••"
+        error={errors.password?.message}
+        variant="solid"
+        {...register("password")}
+      />
+
+      {apiError && (
+        <div className="text-danger text-sm text-center space-y-2">
+          <p>{apiError}</p>
+
+          {type === "register" && isRegistered === false && (
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={handleResendVerification}
+              loading={isLoading === "sendEmail"}
+            >
+              Resend Verification Email
+            </Button>
           )}
         </div>
       )}
 
-      <div>
-        <label className="block text-sm font-medium text-accent mb-2">
-          Email
-        </label>
-        <input
-          {...register("email")}
-          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple focus:border-transparent"
-        />
-        {errors.email && (
-          <p className="text-danger text-sm mt-1">{errors.email.message}</p>
-        )}
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-accent mb-2">
-          Password
-        </label>
-        <input
-          type="password"
-          {...register("password")}
-          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple focus:border-transparent"
-        />
-        {errors.password && (
-          <p className="text-danger text-sm mt-1">{errors.password.message}</p>
-        )}
-      </div>
-
-      {apiError && (
-        <p className="text-danger text-sm text-center">{apiError}</p>
-      )}
-
-      <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading
-          ? "Processing..."
-          : type === "login"
-            ? "Sign In"
-            : "Register"}
+      <Button
+        type="submit"
+        className="w-full"
+        variant="primary"
+        loading={isLoading === "register"}
+      >
+        {type === "login" ? "Sign In" : "Register"}
       </Button>
     </form>
   );

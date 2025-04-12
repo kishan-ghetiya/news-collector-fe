@@ -1,17 +1,69 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import NewsCollectorLogo from "./icons/NewsCollectorLogo";
 import Button from "./ui/Button";
+import { User } from "@/types/user";
+import { FaUserCircle, FaCog, FaBell, FaSignOutAlt } from "react-icons/fa";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { authService } from "@/app/services";
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      const userData = JSON.parse(loggedInUser);
+      setUser(userData);
+    }
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+
+      if (refreshToken) {
+        await authService.logout(refreshToken);
+      }
+
+      localStorage.removeItem("user");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      setUser(null);
+      setIsDropdownOpen(false);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   return (
     <header>
       <div className="container mx-auto mt-14 px-4">
         <div className="flex items-center justify-between h-20 shadow-lg bg-white rounded-xl px-4 sm:px-6 lg:px-8 transition-all duration-300 hover:shadow-xl">
-          {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <div className="w-10 h-10 transition-transform duration-300 group-hover:scale-105">
               <NewsCollectorLogo />
@@ -42,19 +94,101 @@ const Header: React.FC = () => {
               )}
             </nav>
 
-            <div className="hidden md:flex gap-4">
-              <Link href="/login">
-                <Button variant="outline">Sign In</Button>
-              </Link>
-              <Link href="/register">
-                <Button>Register</Button>
-              </Link>
+            <div className="hidden md:flex items-center gap-4">
+              {!user ? (
+                <>
+                  <Link href="/login">
+                    <Button variant="outline">Sign In</Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button>Register</Button>
+                  </Link>
+                </>
+              ) : (
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={toggleDropdown}
+                    className="flex items-center gap-2 focus:outline-none group"
+                    aria-haspopup="true"
+                    aria-expanded={isDropdownOpen}
+                  >
+                    <div className="relative flex items-center justify-center">
+                      <div className="w-9 h-9 rounded-full  bg-purple  flex items-center justify-center text-white font-bold">
+                        {user.fullName
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toUpperCase()}
+                      </div>
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
+                    </div>
+                    <span className="font-medium text-gray-700 hidden lg:inline">
+                      {user.fullName.split(" ")[0]}
+                    </span>
+                    <IoMdArrowDropdown
+                      className={`text-gray-500 transition-transform duration-200 ${
+                        isDropdownOpen ? "transform rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {isDropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50">
+                      <div className="px-4 py-3 border-b border-gray-100">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {user.fullName}
+                        </p>
+                        <p className="text-xs text-gray-500 truncate">
+                          {user.email}
+                        </p>
+                      </div>
+                      <Link
+                        href="/profile"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 transition-colors"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        <FaUserCircle className="mr-3 text-gray-400" />
+                        My Profile
+                      </Link>
+                      <Link
+                        href="/settings"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 transition-colors"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        <FaCog className="mr-3 text-gray-400" />
+                        Settings
+                      </Link>
+                      <Link
+                        href="/notifications"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 transition-colors"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        <FaBell className="mr-3 text-gray-400" />
+                        Notifications
+                        <span className="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                          3
+                        </span>
+                      </Link>
+                      <div className="border-t border-gray-100"></div>
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                      >
+                        <FaSignOutAlt className="mr-3" />
+                        Sign out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
+          {/* Mobile menu button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden text-gray-700 focus:outline-none transition-transform duration-300 hover:scale-125"
+            aria-label="Toggle menu"
           >
             <svg
               className="w-6 h-6"
@@ -83,23 +217,46 @@ const Header: React.FC = () => {
                 key={item}
                 href={`/${item.toLowerCase() === "home" ? "" : item.toLowerCase()}`}
                 className="block pl-4 text-gray-700 hover:text-purple-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300 transform hover:translate-x-2 group"
+                onClick={() => setIsOpen(false)}
               >
                 {item}
               </Link>
             ))}
             <div className="border-t pt-2 space-y-2">
-              <Link
-                href="/login"
-                className="block pl-4 text-purple-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/register"
-                className="block pl-4 text-purple-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300"
-              >
-                Create Account
-              </Link>
+              {!user ? (
+                <>
+                  <Link
+                    href="/login"
+                    className="block pl-4 text-purple-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="block pl-4 text-purple-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Register
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/profile"
+                    className="block pl-4 text-gray-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    My Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block pl-4 text-red-500 hover:bg-red-50 rounded-lg py-2 transition-all duration-300 w-full text-left"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

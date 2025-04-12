@@ -9,11 +9,19 @@ export const authService = {
 
         }),
 
-    login: (data: LoginPayload) =>
-        apiClient<AuthResponse>("auth/login", {
-            method: "POST",
-            body: data,
-        }),
+    login: async (data: LoginPayload) => {
+    const response = await apiClient<AuthResponse>("auth/login", {
+      method: "POST",
+      body: data,
+    });
+
+    localStorage.setItem("accessToken", response.tokens.access.token);
+    localStorage.setItem("refreshToken", response.tokens.refresh.token);
+
+    localStorage.setItem("user", JSON.stringify(response.user));
+
+    return response;
+  },
 
     sendVerificationEmail: (email: string) =>
         apiClient<void>("auth/send-verification-email", {
@@ -21,10 +29,10 @@ export const authService = {
             body: { email },
         }),
 
-    verifyEmail: (userId: string, verificationCode: string) =>
+    verifyEmail: (email: string, verificationCode: string) =>
         apiClient<void>("auth/verify-email", {
             method: "POST",
-            params: { userId, verificationCode },
+            params: { email, verificationCode },
         }),
 
     forgotPassword: (email: string) =>
@@ -58,3 +66,5 @@ export const authService = {
             body: { refreshToken },
         }),
 };
+
+

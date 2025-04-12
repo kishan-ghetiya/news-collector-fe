@@ -36,7 +36,7 @@ const LatestNewsCategory = () => {
     <section className="bg-[#dce6f6] py-20 opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
       <div className="container mx-auto px-4">
         {/* Title */}
-        <div className="text-center mb-12 flex items-center">
+        <div className="flex flex-col md:flex-row text-center mb-12  items-center">
           <h2 className="text-[90px] font-normal text-gray-800 capitalize">
             Education
           </h2>
