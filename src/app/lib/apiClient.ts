@@ -44,36 +44,12 @@ const apiClient = async <T>(
     headers.append("Content-Type", "application/json");
   }
 
-  let response = await fetch(url.toString(), {
+  const response = await fetch(url.toString(), {
     ...options,
     headers,
     body: options.body ? JSON.stringify(options.body) : null,
   });
 
-  if (response.status === 401 && !isUnauthenticatedRequest) {
-    try {
-      const refreshToken = localStorage.getItem("refreshToken");
-      if (!refreshToken) {
-        throw new Error("No refresh token found. Please log in again.");
-      }
-    
-      response = await fetch(url.toString(), {
-        ...options,
-        headers,
-        body: options.body ? JSON.stringify(options.body) : null,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData?.message || "API request failed");
-      }
-
-      return response.json() as Promise<T>;
-    } catch (error) {
-        console.log(error)
-      throw new Error( "Token refresh failed. Please log in again.");
-    }
-  }
 
   if (!response.ok) {
     const errorData = await response.json();
