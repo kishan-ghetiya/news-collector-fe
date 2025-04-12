@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   FaUser,
   FaEnvelope,
@@ -15,80 +15,14 @@ import {
 } from "react-icons/fa";
 import { User } from "@/types/user";
 import Button from "./ui/Button";
+import { authService, userService } from "@/app/services";
+import toast from "react-hot-toast";
+import { useAuth } from "@/context/auth-context";
+import ChangePasswordForm from "./forms/ChangePasswordForm";
 
 const ProfilePage = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, logout } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    location: "",
-    bio: "",
-    website: "",
-    twitter: "",
-    linkedin: "",
-    github: "",
-  });
-
-  useEffect(() => {
-    // Fetch user data - in a real app, this would be an API call
-    const fetchUserData = async () => {
-      // Simulate API call
-      setTimeout(() => {
-        const mockUser: User = {
-          id: "1",
-          fullName: "John Doe",
-          email: "john.doe@example.com",
-          phone: "+1 (555) 123-4567",
-          location: "San Francisco, CA",
-          bio: "Frontend developer passionate about creating beautiful user interfaces with React and TypeScript.",
-          website: "https://johndoe.dev",
-          twitter: "johndoe",
-          linkedin: "in/johndoe",
-          github: "johndoe",
-        };
-        setUser(mockUser);
-        setFormData({
-          fullName: mockUser?.fullName,
-          email: mockUser?.email,
-          phone: mockUser?.phone || "",
-          location: mockUser?.location || "",
-          bio: mockUser?.bio || "",
-          website: mockUser?.website || "",
-          twitter: mockUser?.twitter || "",
-          linkedin: mockUser?.linkedin || "",
-          github: mockUser?.github || "",
-        });
-      }, 500);
-    };
-
-    fetchUserData();
-  }, []);
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    console.log("Updated profile:", formData);
-    setIsEditing(false);
-
-    if (user) {
-      setUser({
-        ...user,
-        ...formData,
-      });
-    }
-  };
 
   if (!user) {
     return (
@@ -135,7 +69,7 @@ const ProfilePage = () => {
         </div>
 
         <div className="p-6">
-          <form onSubmit={handleSubmit}>
+          <form >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
@@ -424,10 +358,10 @@ const ProfilePage = () => {
           <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
             Change Password
           </h2>
-          <form className="mt-4 space-y-4">
+          {/* <form className="mt-4 space-y-4" ref={passwordRef} onSubmit={handlePasswordSubmit}>
             <div>
               <label
-                htmlFor="current-password"
+                htmlFor="currentpassword"
                 className="block text-sm font-medium text-gray-700"
               >
                 Current Password
@@ -437,8 +371,8 @@ const ProfilePage = () => {
                   <FaLock className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
-                  id="current-password"
-                  name="current-password"
+                  id="currentPassword"
+                  name="currentPassword"
                   type="password"
                   required
                   className="focus:ring-purple focus:border-purple focus:border-1  block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
@@ -458,9 +392,10 @@ const ProfilePage = () => {
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <FaLock className="h-5 w-5 text-gray-400" />
                 </div>
+
                 <input
-                  id="new-password"
-                  name="new-password"
+                  id="newPassword"
+                  name="newPassword"
                   type="password"
                   required
                   className="focus:ring-purple focus:border-purple focus:border-1 block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
@@ -481,8 +416,8 @@ const ProfilePage = () => {
                   <FaLock className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
-                  id="confirm-password"
-                  name="confirm-password"
+                  id="confirmPassword"
+                  name="confirmPassword"
                   type="password"
                   required
                   className="focus:ring-purple focus:border-purple focus:border-1 block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
@@ -496,7 +431,9 @@ const ProfilePage = () => {
                 Update Password
               </Button>
             </div>
-          </form>
+          </form> */}
+
+          <ChangePasswordForm/>
         </div>
       </div>
     </div>
