@@ -55,7 +55,7 @@ export default function BlogSection() {
     const fetchData = async () => {
       try {
         const response = await blogService.getBlogList(1, 30);
-        const rawArticles: RawArticle[] = response?.results?.[0]?.results ?? [];
+        const rawArticles: RawArticle[] = response?.results ?? [];
         const transformed = transformArticles(rawArticles);
         setBlogData(transformed);
       } catch (error) {
@@ -72,9 +72,9 @@ export default function BlogSection() {
     <section className="py-16 bg-[#dce6f6] opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogData.map((item) => (
+          {blogData.map((item, index) => (
             <a
-              key={item.id}
+              key={`${item.id}-${index}`}
               href="/singleblog"
               className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-transform duration-300 hover:-translate-y-1 overflow-hidden"
             >
@@ -87,10 +87,15 @@ export default function BlogSection() {
                 />
               </div>
               <div className="p-5">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="bg-black text-white text-xs px-3 py-1 rounded-md uppercase">
-                    {item?.tags?.[0] ?? "General"}
-                  </span>
+                <div className="grid items-center gap-3 mb-3 over">
+                  {item?.tags?.map((item, index) => (
+                    <span
+                      className="bg-black text-white text-xs px-3 py-1 rounded-md uppercase"
+                      key={index}
+                    >
+                      {item ?? "General"}
+                    </span>
+                  ))}
                   <span className="text-sm text-gray-500">
                     {item.readingTime}
                   </span>

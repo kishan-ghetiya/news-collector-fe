@@ -17,5 +17,3 @@ export type Category =
   | "Health"
   | "Science"
   | "Gold";
-
-  
