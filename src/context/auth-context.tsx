@@ -1,6 +1,7 @@
 "use client";
 
 import { authService, userService } from "@/app/services";
+import { ApiError } from "@/types/auth";
 import { User } from "@/types/user";
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -24,8 +25,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         const response = await userService.getUserById(userId);
         setUser(response);
-      } catch (error: any) {
-        toast.error(error?.message || "Failed to load user");
+      } catch (error: unknown) {
+        toast.error((error as ApiError)?.message || "Failed to load user");
         handleLogout();
       }
     };

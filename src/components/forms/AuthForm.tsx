@@ -1,7 +1,12 @@
 "use client";
 import { authService } from "@/app/services";
 import { useAuth } from "@/context/auth-context";
-import { LoginPayload, RegisterPayload } from "@/types/auth";
+import {
+  ApiError,
+  getErrorMessage,
+  LoginPayload,
+  RegisterPayload,
+} from "@/types/auth";
 import { joiResolver } from "@hookform/resolvers/joi";
 import Joi from "joi";
 import { useRouter } from "next/navigation";
@@ -80,14 +85,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
         await authService.register(formData as RegisterPayload);
         handleAuthSuccess();
       }
-    } catch (error: any) {
-      const cause = error?.cause;
-
-      if (cause?.isRegistered === false) {
+    } catch (error: unknown) {
+      if ((error as ApiError)?.cause?.isRegistered === false) {
         setIsRegistered(false);
       }
 
-      setApiError(error?.message || "An unexpected error occurred");
+      setApiError(getErrorMessage(error));
     } finally {
       setIsLoading(null);
     }
@@ -103,9 +106,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
       await authService.sendVerificationEmail(email);
       toast.success("Verification email sent. Please check your inbox.");
       router.push(`/verify-email?email=${email}`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setApiError(
-        error?.message || "Failed to resend verification email. Try again."
+        (error as ApiError)?.message ||
+          "Failed to resend verification email. Try again."
       );
     } finally {
       setIsLoading(null);

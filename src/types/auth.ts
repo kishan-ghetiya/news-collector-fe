@@ -40,3 +40,20 @@ export interface AuthResponse {
   data?: string; 
 }
 
+
+
+export interface ApiError {
+  message: string;
+  cause?: {
+    isRegistered?: boolean;
+  };
+}
+
+export function getErrorMessage(error: unknown): string {
+  if (typeof error === "object" && error !== null && "message" in error) {
+    return String((error as ApiError).message);
+  }
+  return "An unexpected error occurred";
+}
+
+
