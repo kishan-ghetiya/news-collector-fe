@@ -5,7 +5,7 @@ const apiClient = async <T>(
   endpoint: string,
   options: Omit<RequestInit, "body"> & {
     params?: Record<string, string | number | boolean | null | undefined>;
-    body?: any;
+    body?: unknown;
   } = {}
 ): Promise<T> => {
   const url = new URL(`${API_HOST}/${API_VERSION}/${endpoint}`);

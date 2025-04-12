@@ -1,10 +1,11 @@
 "use client";
 
 import { authService } from "@/app/services";
+import { Input } from "@/components/input/Input";
+import Button from "@/components/ui/Button";
+import { getErrorMessage } from "@/types/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import Button from "@/components/ui/Button";
-import { Input } from "@/components/input/Input";
 
 const VerifyEmailPage: React.FC = () => {
   const router = useRouter();
@@ -44,8 +45,8 @@ const VerifyEmailPage: React.FC = () => {
     try {
       await authService.verifyEmail(email, verificationCode);
       setSuccess(true);
-    } catch (err: any) {
-      setError(err?.message || "Verification failed.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Verification failed.");
     } finally {
       setIsVerifying(false);
     }
