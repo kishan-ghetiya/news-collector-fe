@@ -1,4 +1,3 @@
-import { authService } from "../services";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST;
 const API_VERSION = process.env.NEXT_PUBLIC_API_VERSION;
@@ -57,14 +56,7 @@ const apiClient = async <T>(
       if (!refreshToken) {
         throw new Error("No refresh token found. Please log in again.");
       }
-
-      const refreshedData = await authService.refreshTokens(refreshToken); 
-      const newAccessToken = refreshedData.tokens.access.token; 
-
-      localStorage.setItem("accessToken", newAccessToken);
-
-      headers.set("Authorization", `Bearer ${newAccessToken}`);
-
+    
       response = await fetch(url.toString(), {
         ...options,
         headers,

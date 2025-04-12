@@ -1,14 +1,15 @@
 "use client";
 import { authService } from "@/app/services";
+import { useAuth } from "@/context/auth-context";
 import { LoginPayload, RegisterPayload } from "@/types/auth";
 import { joiResolver } from "@hookform/resolvers/joi";
 import Joi from "joi";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import Button from "../ui/Button";
-import { Input } from "../input/Input";
 import toast from "react-hot-toast";
+import { Input } from "../input/Input";
+import Button from "../ui/Button";
 
 interface AuthFormProps {
   type: "login" | "register";
@@ -23,6 +24,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
   );
   const [apiError, setApiError] = useState<string | null>(null);
   const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
+  const { setUser } = useAuth();
 
   const schema = Joi.object<FormData>({
     email: Joi.string()
@@ -67,7 +69,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
 
     try {
       if (type === "login") {
-        await authService.login(formData);
+        const response = await authService.login(formData);
+
+        localStorage.setItem("accessToken", response.tokens.access.token);
+        localStorage.setItem("refreshToken", response.tokens.refresh.token);
+
+        setUser(response.user);
         handleAuthSuccess();
       } else {
         await authService.register(formData as RegisterPayload);

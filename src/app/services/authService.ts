@@ -14,12 +14,6 @@ export const authService = {
       method: "POST",
       body: data,
     });
-
-    localStorage.setItem("accessToken", response.tokens.access.token);
-    localStorage.setItem("refreshToken", response.tokens.refresh.token);
-
-    localStorage.setItem("user", JSON.stringify(response.user));
-
     return response;
   },
 
