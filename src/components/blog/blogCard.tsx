@@ -20,11 +20,18 @@ const BlogCardSection = ({ blogData }) => {
               />
             </div>
             <div className="p-5">
-              <div className="flex items-center gap-3 text-sm mb-3">
-                <span className="bg-black text-white px-2 py-0.5 rounded font-semibold uppercase text-xs">
-                  {blog.tags}
+              <div className="grid items-center gap-3 mb-3 over">
+                {blog?.tags?.map((item, index) => (
+                  <span
+                    className="bg-black text-white text-xs px-3 py-1 rounded-md uppercase"
+                    key={index}
+                  >
+                    {item ?? "General"}
+                  </span>
+                ))}
+                <span className="text-sm text-gray-500">
+                  {blog.readingTime}
                 </span>
-                <span className="text-gray-500">{blog.readTime}</span>
               </div>
               <h4 className="text-lg font-semibold text-gray-900 leading-snug">
                 {blog.title}

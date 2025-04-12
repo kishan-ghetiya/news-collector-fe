@@ -1,6 +1,6 @@
 {
   "extends": "next/core-web-vitals",
-  "ignorePatterns": ["dist"],
+  "ignorePatterns": ["dist", ".next"],
   "rules": {
     "@next/next/no-sync-scripts": "off",
     "react/no-find-dom-node": "off",

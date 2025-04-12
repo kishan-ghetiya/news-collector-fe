@@ -9,25 +9,26 @@ import MixedSection from "./post/post";
 import { useEffect, useState } from "react";
 import { blogService } from "@/app/services";
 import { BlogItem, RawArticle } from "./blog/blog";
+import { categoryService } from "@/app/services/categoryService";
 
-const categories = [
-  { name: "Entertainment", img: "/post16.jpg" },
-  { name: "Nature", img: "/post21.jpg" },
-  { name: "Gaming", img: "/post24.jpg" },
-  { name: "Business", img: "/post25.jpg" },
-  { name: "Science", img: "/post1.jpg" },
-  { name: "Education", img: "/post11.jpg" },
-  { name: "Sport", img: "/post2.jpg" },
-  { name: "Travel", img: "/post4.jpg" },
-];
+export interface CategoryItem {
+  id: string;
+  category?: string;
+  readingTime?: string;
+  title: string;
+  image?: string;
+  tags?: string[];
+  name?: string;
+}
 
 export default function HomeCategories() {
   const [blogData, setBlogData] = useState<BlogItem[]>();
+  const [categoryData, setCategoryData] = useState<CategoryItem[]>();
 
   const addImageToArticles = (articles: RawArticle[]) => {
-    return articles.map((article) => ({
+    return articles?.map((article) => ({
       ...article,
-      image: `/post24.jpg`,
+      image: `/post16.jpg`,
     }));
   };
 
@@ -51,9 +52,18 @@ export default function HomeCategories() {
 
     const fetchData = async () => {
       try {
-        const data = await blogService.getBlogList(1, 30); // Replace with your actual async call
-        const blogData = addImageToArticles(data?.results[0]?.results);
+        const data = await blogService.getBlogList(1, 6); // Replace with your actual async call
+        const blogData = addImageToArticles(data?.results);
         setBlogData(blogData);
+        // Do something with the data
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+
+      try {
+        const data = await categoryService.getCategoryList(1, 8); // Replace with your actual async call
+        const categoryData = addImageToArticles(data?.results);
+        setCategoryData(categoryData);
         // Do something with the data
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -65,19 +75,19 @@ export default function HomeCategories() {
       elements.forEach((el) => observer.unobserve(el));
     };
   }, []);
-  console.log(blogData);
+
   return (
     <section className="py-12 ">
       <div className="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-6 opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
-        {categories.map((category, index) => (
+        {categoryData?.map((category, index) => (
           <a
             key={index}
             href="/category.html"
             className="relative group block overflow-hidden rounded-xl shadow-md transition-transform duration-300 transform hover:scale-105 border-8 border-white"
           >
             <Image
-              src={category.img}
-              alt={category.name}
+              src={category.image ?? ""}
+              alt={category?.title ?? ""}
               height={192}
               width={256}
               loading="lazy"
@@ -85,7 +95,7 @@ export default function HomeCategories() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10 rounded-xl" />
             <div className="absolute bottom-4 left-2 z-20 text-white font-normal text-lg">
-              {category.name}
+              {category?.name}
             </div>
             <Image
               src="/readmore.png"
