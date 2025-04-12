@@ -1,16 +1,15 @@
 "use client";
+import { useAuth } from "@/context/auth-context";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { FaBell, FaCog, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
+import { IoMdArrowDropdown } from "react-icons/io";
 import NewsCollectorLogo from "./icons/NewsCollectorLogo";
 import Button from "./ui/Button";
-import { User } from "@/types/user";
-import { FaUserCircle, FaCog, FaBell, FaSignOutAlt } from "react-icons/fa";
-import { IoMdArrowDropdown } from "react-icons/io";
-import { authService } from "@/app/services";
 
 const Header: React.FC = () => {
+  const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -29,32 +28,6 @@ const Header: React.FC = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem("user");
-    if (loggedInUser) {
-      const userData = JSON.parse(loggedInUser);
-      setUser(userData);
-    }
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      const refreshToken = localStorage.getItem("refreshToken");
-
-      if (refreshToken) {
-        await authService.logout(refreshToken);
-      }
-
-      localStorage.removeItem("user");
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      setUser(null);
-      setIsDropdownOpen(false);
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -171,7 +144,7 @@ const Header: React.FC = () => {
                       </Link>
                       <div className="border-t border-gray-100"></div>
                       <button
-                        onClick={handleLogout}
+                        onClick={logout}
                         className="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
                       >
                         <FaSignOutAlt className="mr-3" />
@@ -250,7 +223,7 @@ const Header: React.FC = () => {
                     My Profile
                   </Link>
                   <button
-                    onClick={handleLogout}
+                    onClick={logout}
                     className="block pl-4 text-red-500 hover:bg-red-50 rounded-lg py-2 transition-all duration-300 w-full text-left"
                   >
                     Logout
