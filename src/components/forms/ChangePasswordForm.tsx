@@ -57,9 +57,6 @@ export default function ChangePasswordForm() {
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
       {/* Current Password */}
       <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Current Password
-        </label>
         <div className="mt-1 relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <FaLock className="text-gray-400" />

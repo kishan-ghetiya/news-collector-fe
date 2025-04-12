@@ -3,6 +3,7 @@
 import { authService, userService } from "@/app/services";
 import { ApiError } from "@/types/auth";
 import { User } from "@/types/user";
+import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const initializeUser = async () => {
@@ -39,6 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (refreshToken) {
       try {
         await authService.logout(refreshToken);
+        router.push("/")
       } catch (err) {
         console.error("Logout error", err);
       }
