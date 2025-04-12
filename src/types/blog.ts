@@ -22,8 +22,14 @@ export interface Blog {
 }
 
 export interface BlogListResponse {
-  data: Blog[];
-  total: number;
-  page: number;
-  limit: number;
+  results: {
+    results: {
+      id: string;
+      title: string;
+      link: string;
+      tags: string[];
+      summary: string;
+      createdAt: string;
+    }[];
+  };
 }

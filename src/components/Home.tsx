@@ -6,7 +6,9 @@ import CategoryMarquee from "./category/categoryMarquee";
 import ArticlesSection from "./articles/articles";
 import LatestNewsCategory from "./category/latestNews";
 import MixedSection from "./post/post";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { blogService } from "@/app/services";
+import { BlogItem, RawArticle } from "./blog/blog";
 
 const categories = [
   { name: "Entertainment", img: "/post16.jpg" },
@@ -20,6 +22,15 @@ const categories = [
 ];
 
 export default function HomeCategories() {
+  const [blogData, setBlogData] = useState<BlogItem[]>();
+
+  const addImageToArticles = (articles: RawArticle[]) => {
+    return articles.map((article) => ({
+      ...article,
+      image: `/post24.jpg`,
+    }));
+  };
+
   useEffect(() => {
     const elements = document.querySelectorAll(".scroll-fade-in");
     const observer = new IntersectionObserver(
@@ -38,12 +49,23 @@ export default function HomeCategories() {
 
     elements.forEach((el) => observer.observe(el));
 
+    const fetchData = async () => {
+      try {
+        const data = await blogService.getBlogList(1, 30); // Replace with your actual async call
+        const blogData = addImageToArticles(data?.results[0]?.results);
+        setBlogData(blogData);
+        // Do something with the data
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
     // Cleanup observer on component unmount
     return () => {
       elements.forEach((el) => observer.unobserve(el));
     };
   }, []);
-
+  console.log(blogData);
   return (
     <section className="py-12 ">
       <div className="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-6 opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
@@ -79,7 +101,7 @@ export default function HomeCategories() {
 
       <LatestBlogSection />
 
-      <BlogCardSection />
+      <BlogCardSection blogData={blogData} />
 
       <CategoryMarquee />
 
