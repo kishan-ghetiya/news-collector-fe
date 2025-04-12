@@ -1,11 +1,20 @@
-import axios from 'axios';
-import { EditProfilePayload, UserResponse } from '../types/user';
+import { EditProfilePayload, User } from "@/types/user";
+import apiClient from "../lib/apiClient";
 
-export const editUserProfile = (userId: string, data: EditProfilePayload) =>
-    axios.patch<UserResponse>(`/v1/users/edit-profile/${userId}`, data);
+export const userService = {
+  editProfile: (userId: string, data: EditProfilePayload) =>
+    apiClient<User>(`users/edit-profile/${userId}`, {
+      method: "PATCH",
+      body: data,
+    }),
 
-export const deleteUser = (userId: string) =>
-    axios.delete(`/v1/users/delete/${userId}`);
+  deleteUser: (userId: string) =>
+    apiClient<void>(`users/delete/${userId}`, {
+      method: "DELETE",
+    }),
 
-export const getUser = (userId: string) =>
-    axios.get<UserResponse>(`/v1/users/get/${userId}`);
+  getUserById: (userId: string) =>
+    apiClient<User>(`users/get/${userId}`, {
+      method: "GET",
+    }),
+};

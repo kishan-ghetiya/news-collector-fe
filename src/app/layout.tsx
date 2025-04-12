@@ -1,15 +1,18 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Providers from "@/providers";
-const inter = Inter({
+import LayoutWrapper from "@/components/LayoutWrapper";
+
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "600", "700"], // Optional: define the weights you need
+  variable: "--font-manrope",
+  display: "swap",
 });
-export const metadata: Metadata = {
-  title: "News Collector App",
-  description: "A news collector app",
+
+export const metadata = {
+  title: "New Collector App",
+  description:
+    "News Collector App aggregates and displays the latest news from various sources. Users can explore articles by categories and tags for a tailored reading experience.",
 };
 
 export default function RootLayout({
@@ -27,9 +30,8 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className={inter.className}>
-        <Header />
-        <Providers>{children}</Providers>
+      <body className={manrope.className}>
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );

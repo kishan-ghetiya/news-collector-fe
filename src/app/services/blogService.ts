@@ -1,21 +1,44 @@
-import axios from "axios";
-import { BlogResponse, BookmarkPayload, EditBlogPayload } from "../types/blog";
+import { Blog, BlogListResponse } from "@/types/blog";
+import apiClient from "../lib/apiClient";
 
+export const blogService = {
+  addBlog: (data: Omit<Blog, "id" | "createdAt">) =>
+    apiClient<Blog>("blog/create", {
+      method: "POST",
+      body: data,
+    }),
 
-export const getBlog = (blogId: string) =>
-    axios.get<BlogResponse>(`/v1/blog/${blogId}`);
+  editBlog: (blogId: string, data: Partial<Blog>) =>
+    apiClient<Blog>(`blog/edit/${blogId}`, {
+      method: "PATCH",
+      body: data,
+    }),
 
-export const editBlog = (blogId: string, data: EditBlogPayload) =>
-    axios.patch<BlogResponse>(`/v1/blog/edit/${blogId}`, data);
+  deleteBlog: (blogId: string) =>
+    apiClient<void>(`blog/delete/${blogId}`, {
+      method: "DELETE",
+    }),
 
-export const deleteBlog = (blogId: string) =>
-    axios.delete(`/v1/blog/delete/${blogId}`);
+  getBlogById: (blogId: string) =>
+    apiClient<Blog>(`blog/${blogId}`, {
+      method: "GET",
+    }),
 
-export const listBlogs = (page = 1, limit = 10) =>
-    axios.get(`/v1/blog/list?page=${page}&limit=${limit}`);
+  getBlogList: (page: number = 1, limit: number = 10) =>
+    apiClient<BlogListResponse>("blog/list", {
+      method: "GET",
+      params: { page, limit },
+    }),
 
-export const bookmarkBlog = (data: BookmarkPayload) =>
-    axios.post(`/v1/blog/bookmark`, data);
+  // bookmarkBlog: (data: BookmarkPayload) =>
+  //   apiClient<void>("blog/bookmark", {
+  //     method: "POST",
+  //     body: data,
+  //   }),
 
-export const getBookmarks = (page = 1, limit = 10) =>
-    axios.post(`/v1/blog/bookmarks/get?page=${page}&limit=${limit}`);
+  getBookmarks: (page: number = 1, limit: number = 10) =>
+    apiClient<BlogListResponse>("blog/bookmarks/get", {
+      method: "GET",
+      params: { page, limit },
+    }),
+};

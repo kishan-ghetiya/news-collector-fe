@@ -1,21 +1,69 @@
 "use client";
-
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import NewsCollectorLogo from "./icons/NewsCollectorLogo";
-import Menu from "./Menu/Menu";
-import MenuItem from "./Menu/MenuItem";
-import Backdrop from "./Menu/Backdrop";
+import Button from "./ui/Button";
+import { User } from "@/types/user";
+import { FaUserCircle, FaCog, FaBell, FaSignOutAlt } from "react-icons/fa";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { authService } from "@/app/services";
 
-export default function Header() {
+const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      const userData = JSON.parse(loggedInUser);
+      setUser(userData);
+    }
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+
+      if (refreshToken) {
+        await authService.logout(refreshToken);
+      }
+
+      localStorage.removeItem("user");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      setUser(null);
+      setIsDropdownOpen(false);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   return (
     <header>
-      <div className="max-w-7xl mx-auto mt-14 px-4">
-        <div className="flex items-center justify-between h-16 shadow-lg bg-white rounded-xl px-4 sm:px-6 lg:px-8 transition-all duration-300 hover:shadow-xl">
-          {/* Logo */}
+      <div className="container mx-auto mt-14 px-4">
+        <div className="flex items-center justify-between h-20 shadow-lg bg-white rounded-xl px-4 sm:px-6 lg:px-8 transition-all duration-300 hover:shadow-xl">
           <Link href="/" className="flex items-center gap-2 group">
             <div className="w-10 h-10 transition-transform duration-300 group-hover:scale-105">
               <NewsCollectorLogo />
@@ -26,37 +74,7 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="flex items-center gap-6">
-            {/* Restored Search Component */}
-            <div className="hidden md:flex items-center space-x-2">
-              <form action="#" className="relative">
-                <input
-                  type="search"
-                  placeholder="Search articles"
-                  className="border border-gray-200 rounded-full px-4 py-1.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300 transition-all duration-300 w-48 hover:w-56"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 hover:scale-110 transition-transform duration-300"
-                >
-                  <svg
-                    className="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
-                </button>
-              </form>
-            </div>
-
             <nav className="hidden md:flex space-x-8">
               {["Home", "About", "Categories", "Posts", "Contact"].map(
                 (item) => (
@@ -70,55 +88,107 @@ export default function Header() {
                     </span>
                     <div className="absolute inset-x-0 -bottom-1">
                       <div className="h-[2px] w-0 bg-purple-700 transition-all duration-400 group-hover:w-full opacity-80" />
-                      <div className="h-[1px] w-0 bg-purple-700 transition-all duration-500 group-hover:w-full mt-[2px] opacity-60" />
                     </div>
                   </Link>
                 )
               )}
             </nav>
 
-            {/* User Menu Trigger */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="hidden md:flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 hover:bg-purple-100 transition-colors duration-300"
-            >
-              <svg
-                className="w-5 h-5 text-gray-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-            </button>
+            <div className="hidden md:flex items-center gap-4">
+              {!user ? (
+                <>
+                  <Link href="/login">
+                    <Button variant="outline">Sign In</Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button>Register</Button>
+                  </Link>
+                </>
+              ) : (
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={toggleDropdown}
+                    className="flex items-center gap-2 focus:outline-none group"
+                    aria-haspopup="true"
+                    aria-expanded={isDropdownOpen}
+                  >
+                    <div className="relative flex items-center justify-center">
+                      <div className="w-9 h-9 rounded-full  bg-purple  flex items-center justify-center text-white font-bold">
+                        {user.fullName
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toUpperCase()}
+                      </div>
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
+                    </div>
+                    <span className="font-medium text-gray-700 hidden lg:inline">
+                      {user.fullName.split(" ")[0]}
+                    </span>
+                    <IoMdArrowDropdown
+                      className={`text-gray-500 transition-transform duration-200 ${
+                        isDropdownOpen ? "transform rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {isDropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50">
+                      <div className="px-4 py-3 border-b border-gray-100">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {user.fullName}
+                        </p>
+                        <p className="text-xs text-gray-500 truncate">
+                          {user.email}
+                        </p>
+                      </div>
+                      <Link
+                        href="/profile"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 transition-colors"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        <FaUserCircle className="mr-3 text-gray-400" />
+                        My Profile
+                      </Link>
+                      <Link
+                        href="/settings"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 transition-colors"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        <FaCog className="mr-3 text-gray-400" />
+                        Settings
+                      </Link>
+                      <Link
+                        href="/notifications"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 transition-colors"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        <FaBell className="mr-3 text-gray-400" />
+                        Notifications
+                        <span className="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                          3
+                        </span>
+                      </Link>
+                      <div className="border-t border-gray-100"></div>
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                      >
+                        <FaSignOutAlt className="mr-3" />
+                        Sign out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* User Menu Dropdown */}
-          {isMenuOpen && (
-            <>
-              <Menu
-                onClose={() => {
-                  setIsMenuOpen(false);
-                }}
-              >
-                <MenuItem href={"/login"}>Login</MenuItem>
-                <MenuItem href={"/register"}>Register</MenuItem>
-              </Menu>
-              <span onClick={() => setIsMenuOpen(false)}>
-                <Backdrop />
-              </span>
-            </>
-          )}
-
-          {/* Mobile Menu Button */}
+          {/* Mobile menu button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden text-gray-700 focus:outline-none transition-transform duration-300 hover:scale-125"
+            aria-label="Toggle menu"
           >
             <svg
               className="w-6 h-6"
@@ -136,34 +206,63 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
         <div
           className={`md:hidden mt-2 overflow-hidden transition-all duration-500 ease-in-out ${
             isOpen ? "max-h-96" : "max-h-0"
           }`}
         >
           <div className="py-2 space-y-3 bg-white rounded-lg shadow-lg">
-            {[
-              "Home",
-              "About",
-              "Categories",
-              "Posts",
-              "Contact",
-              "Login",
-              "Register",
-            ].map((item) => (
+            {["Home", "About", "Categories", "Posts", "Contact"].map((item) => (
               <Link
                 key={item}
                 href={`/${item.toLowerCase() === "home" ? "" : item.toLowerCase()}`}
                 className="block pl-4 text-gray-700 hover:text-purple-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300 transform hover:translate-x-2 group"
+                onClick={() => setIsOpen(false)}
               >
                 {item}
-                <div className="w-0 h-[1px] bg-purple-700 mt-1 transition-all duration-500 group-hover:w-3/4 opacity-60" />
               </Link>
             ))}
+            <div className="border-t pt-2 space-y-2">
+              {!user ? (
+                <>
+                  <Link
+                    href="/login"
+                    className="block pl-4 text-purple-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="block pl-4 text-purple-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Register
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/profile"
+                    className="block pl-4 text-gray-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    My Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block pl-4 text-red-500 hover:bg-red-50 rounded-lg py-2 transition-all duration-300 w-full text-left"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
     </header>
   );
-}
+};
+
+export default Header;

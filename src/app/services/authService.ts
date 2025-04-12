@@ -1,17 +1,70 @@
-import api from "../lib/axios";
-import { ChangePasswordPayload, LoginPayload, RegisterPayload, ResetPasswordPayload, TokenResponse } from "../types/auth";
+import { AuthResponse, LoginPayload, RegisterPayload } from "@/types/auth";
+import apiClient from "../lib/apiClient";
 
-export const register = (payload: RegisterPayload) => api.post("/register", payload);
-export const login = (payload: LoginPayload) => api.post("/login", payload);
-export const sendVerificationEmail = (email: string) => api.post("/send-verification-email", { email });
-export const verifyEmail = (userId: string, code: string) =>
-    api.post(`/verify-email?userId=${userId}&verificationCode=${code}`);
-export const forgotPassword = (email: string) => api.post("/forgot-password", { email });
-export const resetPassword = (token: string, payload: ResetPasswordPayload) =>
-    api.post(`/reset-password?token=${token}`, payload);
-export const changePassword = (payload: ChangePasswordPayload, token: string) =>
-    api.post("/change-password", payload, { headers: { Authorization: `Bearer ${token}` } });
-export const refreshTokens = (refreshToken: string) =>
-    api.post<TokenResponse>("/refresh-tokens", { refreshToken }, { headers: { Authorization: `Bearer ${refreshToken}` } });
-export const logout = (refreshToken: string, token: string) =>
-    api.post("/logout", { refreshToken }, { headers: { Authorization: `Bearer ${token}` } });
+export const authService = {
+    register: (data: RegisterPayload) =>
+        apiClient<AuthResponse>("auth/register", {
+            method: "POST",
+            body: data,
+
+        }),
+
+    login: async (data: LoginPayload) => {
+    const response = await apiClient<AuthResponse>("auth/login", {
+      method: "POST",
+      body: data,
+    });
+
+    localStorage.setItem("accessToken", response.tokens.access.token);
+    localStorage.setItem("refreshToken", response.tokens.refresh.token);
+
+    localStorage.setItem("user", JSON.stringify(response.user));
+
+    return response;
+  },
+
+    sendVerificationEmail: (email: string) =>
+        apiClient<void>("auth/send-verification-email", {
+            method: "POST",
+            body: { email },
+        }),
+
+    verifyEmail: (email: string, verificationCode: string) =>
+        apiClient<void>("auth/verify-email", {
+            method: "POST",
+            params: { email, verificationCode },
+        }),
+
+    forgotPassword: (email: string) =>
+        apiClient<void>("auth/forgot-password", {
+            method: "POST",
+            body: { email },
+        }),
+
+    resetPassword: (token: string, newPassword: string) =>
+        apiClient<void>("auth/reset-password", {
+            method: "POST",
+            params: { token },
+            body: { password: newPassword },
+        }),
+
+    changePassword: (oldPassword: string, newPassword: string) =>
+        apiClient<void>("auth/change-password", {
+            method: "POST",
+            body: { oldPassword, newPassword },
+        }),
+
+    refreshTokens: (refreshToken: string) =>
+        apiClient<AuthResponse>("auth/refresh-tokens", {
+            method: "POST",
+            body: { refreshToken },
+        }),
+
+    logout: (refreshToken: string) =>
+        apiClient<void>("auth/logout", {
+            method: "POST",
+            body: { refreshToken },
+        }),
+};
+
+
