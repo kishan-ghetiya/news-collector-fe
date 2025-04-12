@@ -3,6 +3,7 @@
 import { authService } from "@/app/services";
 import { User } from "@/types/user";
 import { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface AuthContextProps {
   user: User | null;
@@ -22,13 +23,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       try {
         const response = await authService.refreshTokens(refreshToken);
-        console.log(response);
         localStorage.setItem("accessToken", response.tokens.access.token);
         localStorage.setItem("refreshToken", response.tokens.refresh.token);
         localStorage.setItem("user", JSON.stringify(response.user));
         setUser(response.user);
       } catch (error) {
-        console.error("Token refresh failed", error);
+        toast.error(error?.message || "Token refresh failed");
         handleLogout();
       }
     };
