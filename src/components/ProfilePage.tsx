@@ -78,10 +78,10 @@ const ProfilePage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you would send this to your backend
+
     console.log("Updated profile:", formData);
     setIsEditing(false);
-    // Update the user state with new data
+
     if (user) {
       setUser({
         ...user,
@@ -134,11 +134,9 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Profile Content */}
         <div className="p-6">
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Personal Information */}
               <div className="space-y-4">
                 <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
                   Personal Information
@@ -227,7 +225,6 @@ const ProfilePage = () => {
                 </div>
               </div>
 
-              {/* Bio and Social Links */}
               <div className="space-y-4">
                 <div>
                   <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
@@ -292,7 +289,6 @@ const ProfilePage = () => {
                       )}
                     </div>
 
-                    {/* Twitter */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Twitter
@@ -329,7 +325,6 @@ const ProfilePage = () => {
                       )}
                     </div>
 
-                    {/* LinkedIn */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         LinkedIn
@@ -366,7 +361,6 @@ const ProfilePage = () => {
                       )}
                     </div>
 
-                    {/* GitHub */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         GitHub
@@ -425,7 +419,6 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Change Password Section */}
       <div className="mt-6 bg-white shadow rounded-lg overflow-hidden">
         <div className="p-6">
           <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">

@@ -1,6 +1,6 @@
 "use client";
 
-import { authService } from "@/app/services";
+import { authService, userService } from "@/app/services";
 import { User } from "@/types/user";
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -18,17 +18,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const initializeUser = async () => {
-      const refreshToken = localStorage.getItem("refreshToken");
-      if (!refreshToken) return;
+      const userId = localStorage.getItem("userId");
+      if (!userId) return;
 
       try {
-        const response = await authService.refreshTokens(refreshToken);
-        localStorage.setItem("accessToken", response.tokens.access.token);
-        localStorage.setItem("refreshToken", response.tokens.refresh.token);
-        localStorage.setItem("user", JSON.stringify(response.user));
-        setUser(response.user);
-      } catch (error) {
-        toast.error(error?.message || "Token refresh failed");
+        const response = await userService.getUserById(userId);
+        setUser(response);
+      } catch (error: any) {
+        toast.error(error?.message || "Failed to load user");
         handleLogout();
       }
     };

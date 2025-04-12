@@ -73,7 +73,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
 
         localStorage.setItem("accessToken", response.tokens.access.token);
         localStorage.setItem("refreshToken", response.tokens.refresh.token);
-
+        localStorage.setItem("userId", response.user?.id);
         setUser(response.user);
         handleAuthSuccess();
       } else {
