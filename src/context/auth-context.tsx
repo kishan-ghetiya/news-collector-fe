@@ -1,6 +1,7 @@
 "use client";
 
 import { authService, userService } from "@/app/services";
+import { deleteCookie, getCookie } from "@/components/utils";
 import { ApiError } from "@/types/auth";
 import { User } from "@/types/user";
 import { useRouter } from "next/navigation";
@@ -21,7 +22,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const initializeUser = async () => {
-      const userId = localStorage.getItem("userId");
+      const userId = getCookie("userId");
       if (!userId) return;
 
       try {
@@ -37,7 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const handleLogout = async () => {
-    const refreshToken = localStorage.getItem("refreshToken");
+    const refreshToken = getCookie("refreshToken");
     if (refreshToken) {
       try {
         await authService.logout(refreshToken);
@@ -46,7 +47,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.error("Logout error", err);
       }
     }
-    localStorage.clear();
+    deleteCookie("accessToken");
+    deleteCookie("refreshToken");
+    deleteCookie("userId");
     setUser(null);
   };
 

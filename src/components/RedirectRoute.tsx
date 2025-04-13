@@ -28,8 +28,6 @@ const RedirectRoute: React.FC<RedirectRouteProps> = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
-    // if (loading) return;
-    console.log(user);
     if (user && EXCLUDED_PATHS.includes(pathname)) {
       router.push("/");
     }

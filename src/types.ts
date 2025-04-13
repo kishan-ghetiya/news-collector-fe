@@ -17,3 +17,9 @@ export type Category =
   | "Health"
   | "Science"
   | "Gold";
+
+export interface CookieOptions {
+  name: string;
+  value: string;
+  days?: number;
+}

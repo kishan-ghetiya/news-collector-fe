@@ -1,3 +1,5 @@
+import { deleteCookie, getCookie, handleSetCookie } from "@/components/utils";
+
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST;
 const API_VERSION = process.env.NEXT_PUBLIC_API_VERSION;
 
@@ -9,8 +11,7 @@ const apiClient = async <T>(
   } = {}
 ): Promise<T> => {
   const url = new URL(`${API_HOST}/${API_VERSION}/${endpoint}`);
-  const token = localStorage.getItem("accessToken");
-
+  const token = getCookie("accessToken");
   if (options.params) {
     Object.entries(options.params).forEach(([key, value]) => {
       if (value != null) {
@@ -35,9 +36,10 @@ const apiClient = async <T>(
     headers,
     body: options.body ? JSON.stringify(options.body) : null,
   });
-  const refreshToken = localStorage.getItem("refreshToken");
-  const userId = localStorage.getItem("userId");
+  const refreshToken = getCookie("refreshToken");
+  const userId = getCookie("userId");
   if (response.status === 401 && refreshToken && userId) {
+    if (!refreshToken) throw new Error("Refresh token not found");
     try {
       const refreshResponse = await fetch(
         `${API_HOST}/${API_VERSION}/auth/refresh-tokens`,
@@ -54,8 +56,14 @@ const apiClient = async <T>(
 
       const newTokens = await refreshResponse.json();
 
-      localStorage.setItem("accessToken", newTokens.tokens.access.token);
-      localStorage.setItem("refreshToken", newTokens.tokens.refresh.token);
+      handleSetCookie({
+        name: "accessToken",
+        value: newTokens.tokens.access.token,
+      });
+      handleSetCookie({
+        name: "refreshToken",
+        value: newTokens.tokens.refresh.token,
+      });
 
       headers.set("Authorization", `Bearer ${newTokens.tokens.access.token}`);
 
@@ -75,7 +83,9 @@ const apiClient = async <T>(
       return retryResponse.json() as Promise<T>;
     } catch (err) {
       console.log(err);
-      localStorage.clear();
+      deleteCookie("accessToken");
+      deleteCookie("refreshToken");
+      deleteCookie("userId");
       throw new Error("Token refresh failed. Please login again.");
     }
   }
