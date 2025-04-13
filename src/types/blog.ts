@@ -23,13 +23,11 @@ export interface Blog {
 
 export interface BlogListResponse {
   results: {
-    results: {
-      id: string;
-      title: string;
-      link: string;
-      tags: string[];
-      summary: string;
-      createdAt: string;
-    }[];
-  };
+    id: string;
+    title: string;
+    link: string;
+    tags: string[];
+    summary: string;
+    createdAt: string;
+  }[];
 }

@@ -61,7 +61,7 @@ const LatestBlogSection = () => {
                 href="/singleblog"
                 className="flex items-center text-center hover:scale-[1.02] transition-transform duration-300"
               >
-                <div className="w-56 h-28 relative">
+                <div className="w-48 h-28 relative">
                   <Image
                     src={post.image}
                     alt={post.title}
