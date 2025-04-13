@@ -36,11 +36,10 @@ const apiClient = async <T>(
     headers,
     body: options.body ? JSON.stringify(options.body) : null,
   });
-
-  if (response.status === 401) {
-    const refreshToken = getCookie("refreshToken");
+  const refreshToken = getCookie("refreshToken");
+  const userId = getCookie("userId");
+  if (response.status === 401 && refreshToken && userId) {
     if (!refreshToken) throw new Error("Refresh token not found");
-
     try {
       const refreshResponse = await fetch(
         `${API_HOST}/${API_VERSION}/auth/refresh-tokens`,

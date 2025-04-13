@@ -2,7 +2,7 @@
 import { useAuth } from "@/context/auth-context";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { FaBell, FaCog, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
+import { FaBell, FaLock, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
 import NewsCollectorLogo from "./icons/NewsCollectorLogo";
 import Button from "./ui/Button";
@@ -106,7 +106,7 @@ const Header: React.FC = () => {
                   </button>
 
                   {isDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50">
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50 ">
                       <div className="px-4 py-3 border-b border-gray-100">
                         <p className="text-sm font-medium text-gray-900 truncate">
                           {user.fullName}
@@ -117,23 +117,23 @@ const Header: React.FC = () => {
                       </div>
                       <Link
                         href="/profile"
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 transition-colors"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-slate-100 transition-colors "
                         onClick={() => setIsDropdownOpen(false)}
                       >
                         <FaUserCircle className="mr-3 text-gray-400" />
                         My Profile
                       </Link>
                       <Link
-                        href="/settings"
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 transition-colors"
+                        href="/change-password"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-slate-100 transition-colors"
                         onClick={() => setIsDropdownOpen(false)}
                       >
-                        <FaCog className="mr-3 text-gray-400" />
-                        Settings
+                        <FaLock className="mr-3 text-gray-400" />
+                        Change Password
                       </Link>
-                      <Link
+                      {/* <Link
                         href="/notifications"
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 transition-colors"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-slate-100 transition-colors "
                         onClick={() => setIsDropdownOpen(false)}
                       >
                         <FaBell className="mr-3 text-gray-400" />
@@ -141,7 +141,7 @@ const Header: React.FC = () => {
                         <span className="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">
                           3
                         </span>
-                      </Link>
+                      </Link> */}
                       <div className="border-t border-gray-100"></div>
                       <button
                         onClick={logout}
@@ -157,7 +157,6 @@ const Header: React.FC = () => {
             </div>
           </div>
 
-          {/* Mobile menu button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden text-gray-700 focus:outline-none transition-transform duration-300 hover:scale-125"
@@ -189,7 +188,7 @@ const Header: React.FC = () => {
               <Link
                 key={item}
                 href={`/${item.toLowerCase() === "home" ? "" : item.toLowerCase()}`}
-                className="block pl-4 text-gray-700 hover:text-purple-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300 transform hover:translate-x-2 group"
+                className="block pl-4 text-gray-700 hover:text-purple-700 hover:bg-slate-100 rounded-lg py-2 transition-all duration-300 transform hover:translate-x-2 group"
                 onClick={() => setIsOpen(false)}
               >
                 {item}
@@ -200,14 +199,14 @@ const Header: React.FC = () => {
                 <>
                   <Link
                     href="/login"
-                    className="block pl-4 text-purple-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300"
+                    className="block pl-4 text-purple-700 hover:bg-slate-100 rounded-lg py-2 transition-all duration-300"
                     onClick={() => setIsOpen(false)}
                   >
                     Sign In
                   </Link>
                   <Link
                     href="/register"
-                    className="block pl-4 text-purple-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300"
+                    className="block pl-4 text-purple-700 hover:bg-slate-100 rounded-lg py-2 transition-all duration-300"
                     onClick={() => setIsOpen(false)}
                   >
                     Register
@@ -217,10 +216,17 @@ const Header: React.FC = () => {
                 <>
                   <Link
                     href="/profile"
-                    className="block pl-4 text-gray-700 hover:bg-purple-50 rounded-lg py-2 transition-all duration-300"
+                    className="block pl-4 text-gray-700 hover:bg-slate-100 rounded-lg py-2 transition-all duration-300"
                     onClick={() => setIsOpen(false)}
                   >
                     My Profile
+                  </Link>
+                  <Link
+                    href="/change-password"
+                    className="block pl-4 text-gray-700 hover:bg-slate-100 rounded-lg py-2 transition-all duration-300"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Change Password
                   </Link>
                   <button
                     onClick={logout}
