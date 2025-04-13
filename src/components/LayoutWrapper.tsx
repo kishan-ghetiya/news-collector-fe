@@ -2,7 +2,7 @@
 
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { nonAuthRoutes } from "@/components/utills";
+import { nonAuthRoutes } from "@/components/utils";
 import { AuthProvider } from "@/context/auth-context";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";

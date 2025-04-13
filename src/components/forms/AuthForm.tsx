@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Input } from "../input/Input";
 import Button from "../ui/Button";
+import { handleSetCookie } from "../utils";
 
 interface AuthFormProps {
   type: "login" | "register";
@@ -75,10 +76,18 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
     try {
       if (type === "login") {
         const response = await authService.login(formData);
-
-        localStorage.setItem("accessToken", response.tokens.access.token);
-        localStorage.setItem("refreshToken", response.tokens.refresh.token);
-        localStorage.setItem("userId", response.user?.id);
+        await handleSetCookie({
+          name: "accessToken",
+          value: response.tokens.access.token,
+        });
+        await handleSetCookie({
+          name: "refreshToken",
+          value: response.tokens.refresh.token,
+        });
+        await handleSetCookie({
+          name: "userId",
+          value: response.user?.id,
+        });
         setUser(response.user);
         handleAuthSuccess();
       } else {

@@ -78,8 +78,6 @@ const ProfilePage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log("Updated profile:", formData);
     setIsEditing(false);
 
     if (user) {
