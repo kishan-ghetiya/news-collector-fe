@@ -1,11 +1,14 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { authService } from "@/app/services";
+import { ApiError } from "@/types/auth";
 import { joiResolver } from "@hookform/resolvers/joi";
 import Joi from "joi";
-import { FaLock } from "react-icons/fa";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { authService } from "@/app/services";
+import { Input } from "../input/Input";
 import Button from "../ui/Button";
+import FormContainer from "../ui/FormContainer";
 
 type PasswordFormData = {
   currentPassword: string;
@@ -24,16 +27,18 @@ const schema = Joi.object({
     "any.required": "New password is required",
   }),
   confirmPassword: Joi.string()
-    .valid(Joi.ref("newPassword"))
+    .empty("")
     .required()
+    .valid(Joi.ref("newPassword"))
     .messages({
-      "any.only": "Passwords do not match",
       "string.empty": "Confirm password is required",
+      "any.only": "Passwords do not match",
       "any.required": "Confirm password is required",
     }),
 });
 
 export default function ChangePasswordForm() {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -45,93 +50,51 @@ export default function ChangePasswordForm() {
 
   const onSubmit = async (data: PasswordFormData) => {
     try {
+      setLoading(true);
       await authService.changePassword(data.currentPassword, data.newPassword);
       toast.success("Password changed successfully");
       reset();
-    } catch (err: any) {
-      toast.error(err?.message || "Failed to change password");
+    } catch (err: unknown) {
+      toast.error((err as ApiError)?.message || "Failed to change password");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-      {/* Current Password */}
-      <div>
-        <div className="mt-1 relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FaLock className="text-gray-400" />
-          </div>
-          <input
-            type="password"
-            {...register("currentPassword")}
-            className={`pl-10 w-full px-3 py-2 border rounded-md ${
-              errors.currentPassword ? "border-red-500" : "border-gray-300"
-            }`}
-            placeholder="Enter current password"
-          />
-        </div>
-        {errors.currentPassword && (
-          <p className="text-sm text-red-600 mt-1">
-            {errors.currentPassword.message}
-          </p>
-        )}
-      </div>
+    <FormContainer title="Change Password" variant="lg">
+      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          label="Current Password"
+          type="password"
+          placeholder="Enter current password"
+          error={errors.currentPassword?.message}
+          {...register("currentPassword")}
+          variant="solid"
+        />
+        <Input
+          label="New Password"
+          type="password"
+          placeholder="Enter new password"
+          error={errors.newPassword?.message}
+          {...register("newPassword")}
+          variant="solid"
+        />
+        <Input
+          label="Confirm New Password"
+          type="password"
+          placeholder="Confirm new password"
+          error={errors.confirmPassword?.message}
+          {...register("confirmPassword")}
+          variant="solid"
+        />
 
-      {/* New Password */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          New Password
-        </label>
-        <div className="mt-1 relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FaLock className="text-gray-400" />
-          </div>
-          <input
-            type="password"
-            {...register("newPassword")}
-            className={`pl-10 w-full px-3 py-2 border rounded-md ${
-              errors.newPassword ? "border-red-500" : "border-gray-300"
-            }`}
-            placeholder="Enter new password"
-          />
+        <div className="flex justify-end">
+          <Button type="submit" variant="primary" loading={loading}>
+            Update Password
+          </Button>
         </div>
-        {errors.newPassword && (
-          <p className="text-sm text-red-600 mt-1">
-            {errors.newPassword.message}
-          </p>
-        )}
-      </div>
-
-      {/* Confirm Password */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Confirm New Password
-        </label>
-        <div className="mt-1 relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FaLock className="text-gray-400" />
-          </div>
-          <input
-            type="password"
-            {...register("confirmPassword")}
-            className={`pl-10 w-full px-3 py-2 border rounded-md ${
-              errors.confirmPassword ? "border-red-500" : "border-gray-300"
-            }`}
-            placeholder="Confirm new password"
-          />
-        </div>
-        {errors.confirmPassword && (
-          <p className="text-sm text-red-600 mt-1">
-            {errors.confirmPassword.message}
-          </p>
-        )}
-      </div>
-
-      <div className="flex justify-end">
-        <Button type="submit" variant="primary">
-          Update Password
-        </Button>
-      </div>
-    </form>
+      </form>
+    </FormContainer>
   );
 }

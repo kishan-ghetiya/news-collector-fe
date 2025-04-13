@@ -35,11 +35,9 @@ const apiClient = async <T>(
     headers,
     body: options.body ? JSON.stringify(options.body) : null,
   });
-
-  if (response.status === 401) {
-    const refreshToken = localStorage.getItem("refreshToken");
-    if (!refreshToken) throw new Error("Refresh token not found");
-
+  const refreshToken = localStorage.getItem("refreshToken");
+  const userId = localStorage.getItem("userId");
+  if (response.status === 401 && refreshToken && userId) {
     try {
       const refreshResponse = await fetch(
         `${API_HOST}/${API_VERSION}/auth/refresh-tokens`,

@@ -19,11 +19,17 @@ const schema = Joi.object<ResetForm>({
   password: Joi.string().min(6).required().messages({
     "string.min": "Password must be at least 6 characters",
     "string.empty": "Password is required",
+    "any.required": "Password is required",
   }),
-  confirmPassword: Joi.string().required().valid(Joi.ref("password")).messages({
-    "any.only": "Passwords do not match",
-    "string.empty": "Confirm Password is required",
-  }),
+  confirmPassword: Joi.string()
+    .empty("")
+    .required()
+    .valid(Joi.ref("password"))
+    .messages({
+      "string.empty": "Confirm Password is required",
+      "any.only": "Passwords do not match",
+      "any.required": "Confirm Password is required",
+    }),
 });
 
 const ResetPasswordPage = () => {
@@ -41,14 +47,14 @@ const ResetPasswordPage = () => {
 
   const onSubmit = async (data: ResetForm) => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       await authService.resetPassword(token as string, data.password);
       toast.success("Password reset successfully");
       router.push("/login");
     } catch (error: any) {
       toast.error(error?.message || "Failed to reset password.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -75,7 +81,12 @@ const ResetPasswordPage = () => {
           {...register("confirmPassword")}
           error={errors.confirmPassword?.message}
         />
-        <Button type="submit" variant="primary" loading={isLoading} className="w-full">
+        <Button
+          type="submit"
+          variant="primary"
+          loading={isLoading}
+          className="w-full"
+        >
           Set New Password
         </Button>
       </form>
