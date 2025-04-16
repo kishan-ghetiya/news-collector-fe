@@ -87,7 +87,7 @@ const Header: React.FC = () => {
                   >
                     <div className="relative flex items-center justify-center">
                       <div className="w-9 h-9 rounded-full  bg-purple  flex items-center justify-center text-white font-bold">
-                        {user.fullName
+                        {user?.fullName
                           .split(" ")
                           .map((n) => n[0])
                           .join("")

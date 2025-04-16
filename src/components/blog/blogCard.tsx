@@ -10,6 +10,8 @@ const BlogCardSection = ({ blogData }) => {
             key={index}
             href={blog.link}
             className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <div className="relative w-full h-56">
               <Image

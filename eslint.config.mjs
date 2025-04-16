@@ -13,7 +13,7 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-export default [
+const eslintConfig = [
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...compat.extends("next/core-web-vitals"),
@@ -40,3 +40,5 @@ export default [
     ],
   },
 ];
+
+export default eslintConfig;

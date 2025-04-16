@@ -84,7 +84,7 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="container mx-auto mt-6 pb-10 px-4 md:px-8">
+    <div className="container mx-auto mt-6 pb-10 px-4">
       <div className="bg-white shadow rounded-lg overflow-hidden">
         <div className="bg-gradient-to-r from-fuchsia-600 to-purple p-6 text-white">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
@@ -96,7 +96,9 @@ const ProfilePage = () => {
                   .join("")}
               </div>
               <div>
-                <h1 className="text-2xl font-bold">{user.fullName}</h1>
+                <h1 className="text-2xl font-bold text-white">
+                  {user.fullName}
+                </h1>
                 <p className="text-fuchsia-100">{user?.bio}</p>
               </div>
             </div>
