@@ -4,7 +4,7 @@ import LayoutWrapper from "@/components/LayoutWrapper";
 
 const manrope = Manrope({
   subsets: ["latin"],
-  weight: ["400", "600", "700"], // Optional: define the weights you need
+  weight: ["400", "600", "700"],
   variable: "--font-manrope",
   display: "swap",
 });
@@ -22,14 +22,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-      </head>
       <body className={manrope.className}>
         <LayoutWrapper>{children}</LayoutWrapper>
       </body>
