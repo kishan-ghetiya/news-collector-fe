@@ -19,8 +19,11 @@ const page = () => {
         </Link>
       </div>
       <div className="mt-6 text-center">
-        <Link href="/forgot-password" className="text-purple hover:text-purple-800">
-        Forgot Password
+        <Link
+          href="/forgot-password"
+          className="text-purple hover:text-purple-800"
+        >
+          Forgot Password
         </Link>
       </div>
     </FormContainer>

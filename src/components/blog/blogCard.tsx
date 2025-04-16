@@ -20,10 +20,10 @@ const BlogCardSection = ({ blogData }) => {
               />
             </div>
             <div className="p-5">
-              <div className="grid items-center gap-3 mb-3 over">
+              <div className="flex flex-wrap items-center gap-3 mb-3">
                 {blog?.tags?.map((item, index) => (
                   <span
-                    className="bg-black text-white text-xs px-3 py-1 rounded-md uppercase"
+                    className="bg-black text-white text-xs px-3 py-1 rounded-full uppercase"
                     key={index}
                   >
                     {item ?? "General"}

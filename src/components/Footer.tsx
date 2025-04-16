@@ -41,30 +41,6 @@ export default function Footer() {
             </Link>
           </div>
 
-          {/* Socials Section */}
-          <div className="bg-white rounded-2xl p-6">
-            <h4 className="uppercase font-medium underline text-lg mb-4">
-              socials
-            </h4>
-            <div className="flex gap-4">
-              {["fb", "twitter", "insta", "you", "pint"].map((icon, i) => (
-                <Link
-                  key={i}
-                  href={`http://www.${icon === "you" ? "youtube" : icon === "pint" ? "pinterest" : icon}.com/`}
-                  target="_blank"
-                >
-                  <Image
-                    src={`/${icon}.png`}
-                    alt={icon}
-                    width={32}
-                    height={32}
-                    className="w-8 h-8"
-                  />
-                </Link>
-              ))}
-            </div>
-          </div>
-
           {/* Newsletter Section */}
           <div className="bg-white rounded-2xl p-6">
             <h4 className="uppercase font-medium underline text-lg mb-4">

@@ -87,20 +87,20 @@ export default function BlogSection() {
                 />
               </div>
               <div className="p-5">
-                <div className="grid items-center gap-3 mb-3 over">
+                <div className="flex flex-wrap items-center gap-3 mb-3">
                   {item?.tags?.map((item, index) => (
                     <span
-                      className="bg-black text-white text-xs px-3 py-1 rounded-md uppercase"
+                      className="bg-black text-white text-xs px-3 py-1 rounded-full uppercase"
                       key={index}
                     >
                       {item ?? "General"}
                     </span>
                   ))}
-                  <span className="text-sm text-gray-500">
-                    {item.readingTime}
-                  </span>
                 </div>
-                <h4 className="text-lg font-semibold text-gray-800 leading-snug">
+                <span className="text-sm text-gray-500">
+                  {item.readingTime}
+                </span>
+                <h4 className="text-lg font-semibold text-gray-900 leading-snug mt-2">
                   {item.title}
                 </h4>
               </div>

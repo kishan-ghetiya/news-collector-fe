@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { authService } from "@/app/services";
 import { useForm } from "react-hook-form";
