@@ -1,4 +1,12 @@
 
+
+# Auto fix ESLint + Prettier
+echo "🧹 Running ESLint + Prettier Auto Fix"
+yarn precommit || (
+    echo '❌ Auto-fix failed. You might need to fix issues manually.'
+    false;
+)
+
 # Check Prettier standards
 yarn check-format ||
 (

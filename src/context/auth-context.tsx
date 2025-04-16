@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (refreshToken) {
       try {
         await authService.logout(refreshToken);
-        router.push("/")
+        router.push("/");
       } catch (err) {
         console.error("Logout error", err);
       }

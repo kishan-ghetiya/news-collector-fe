@@ -2,7 +2,7 @@
 import { useAuth } from "@/context/auth-context";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { FaBell, FaLock, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
+import { FaLock, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
 import NewsCollectorLogo from "./icons/NewsCollectorLogo";
 import Button from "./ui/Button";
@@ -74,7 +74,7 @@ const Header: React.FC = () => {
                     <Button variant="outline">Sign In</Button>
                   </Link>
                   <Link href="/register">
-                    <Button>Register</Button>
+                    <Button variant="primary">Register</Button>
                   </Link>
                 </>
               ) : (

@@ -16,7 +16,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const variants = {
-    primary: "bg-purple text-white hover:bg-purple-800",
+    primary: "border-2 border-purple bg-purple text-white hover:bg-purple-800",
     outline: "border-2 border-purple text-purple hover:bg-purple-50",
     danger: "bg-danger text-white hover:bg-danger-600",
   };
