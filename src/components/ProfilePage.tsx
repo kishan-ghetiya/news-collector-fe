@@ -7,18 +7,12 @@ import { useForm } from "react-hook-form";
 import {
   FaEdit,
   FaEnvelope,
-  FaGithub,
-  FaGlobe,
-  FaLinkedin,
   FaMapMarkerAlt,
   FaPhone,
   FaSave,
-  FaTwitter,
   FaUser,
 } from "react-icons/fa";
 import Button from "./ui/Button";
-
-const socialFields = ["website", "twitter", "linkedin", "github"];
 
 const schema = Joi.object({
   fullName: Joi.string().min(3).required(),
@@ -232,86 +226,6 @@ const ProfilePage = () => {
                       {user.bio || "No bio provided"}
                     </p>
                   )}
-                </div>
-
-                {/* Socials */}
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
-                    Social Links
-                  </h2>
-                  <div className="space-y-3 mt-4">
-                    {socialFields.map((field) => (
-                      <div key={field}>
-                        <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">
-                          {field}
-                        </label>
-                        {isEditing ? (
-                          <div className="flex">
-                            <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500">
-                              {field === "website" ? (
-                                <FaGlobe />
-                              ) : field === "twitter" ? (
-                                <FaTwitter />
-                              ) : field === "linkedin" ? (
-                                <FaLinkedin />
-                              ) : (
-                                <FaGithub />
-                              )}
-                            </span>
-                            <input
-                              {...register(field as keyof typeof user)}
-                              className="flex-1 block w-full rounded-none rounded-r-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-purple"
-                              placeholder={
-                                field === "website" ? "https://" : "username"
-                              }
-                            />
-                          </div>
-                        ) : user[field] ? (
-                          <a
-                            href={
-                              field === "website"
-                                ? user[field]
-                                : field === "linkedin"
-                                  ? `https://linkedin.com/${user[field]}`
-                                  : `https://${field}.com/${user[field]}`
-                            }
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center space-x-2 text-fuchsia-600 hover:underline"
-                          >
-                            {field === "website" ? (
-                              <FaGlobe />
-                            ) : field === "twitter" ? (
-                              <FaTwitter />
-                            ) : field === "linkedin" ? (
-                              <FaLinkedin />
-                            ) : (
-                              <FaGithub />
-                            )}
-                            <span>
-                              {field === "twitter" || field === "github"
-                                ? "@"
-                                : ""}
-                              {user[field]}
-                            </span>
-                          </a>
-                        ) : (
-                          <div className="flex items-center space-x-2 text-gray-500">
-                            {field === "website" ? (
-                              <FaGlobe />
-                            ) : field === "twitter" ? (
-                              <FaTwitter />
-                            ) : field === "linkedin" ? (
-                              <FaLinkedin />
-                            ) : (
-                              <FaGithub />
-                            )}
-                            <span>Not provided</span>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
                 </div>
               </div>
             </div>

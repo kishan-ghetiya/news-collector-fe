@@ -1,7 +1,12 @@
 import { CookieOptions } from "@/types";
 import Cookies from "js-cookie";
 
-export const nonAuthRoutes = ["/register", "/login", "/verify-email"];
+export const nonAuthRoutes = [
+  "/register",
+  "/login",
+  "/verify-email",
+  "/forgot-password",
+];
 
 export const COOKIE_CONFIG = {
   maxAge: 60 * 60 * 24 * 7,

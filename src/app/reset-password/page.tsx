@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
