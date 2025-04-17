@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { FaGithub, FaTwitter } from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -69,12 +70,38 @@ export default function Footer() {
       </div>
 
       {/* Copyright */}
-      <div className="py-4 rounded-full container px-4">
-        <div className="container mx-auto text-center text-sm bg-black text-white rounded-full px-4 py-6">
-          © 2024
-          <Link href="#" className="underline ml-2">
-            News collector
-          </Link>
+      <div className="fixed bottom-0 left-0 w-full bg-white text-black dark:bg-gray-900 dark:text-white z-50 shadow-inner">
+        <div className="flex items-center justify-between px-6 py-4 text-sm">
+          {/* Empty div to balance center alignment */}
+          <div className="w-1/3" />
+
+          {/* Center content */}
+          <div className="w-1/3 text-center">
+            <span>
+              <Link href="/" className="font-medium hover:underline">
+                News collector
+              </Link>{" "}
+              © {new Date().getFullYear()} All rights reserved.
+            </span>
+          </div>
+
+          {/* Right side icons */}
+          <div className="w-1/3 flex justify-end gap-3">
+            <a
+              href="https://github.com/your-profile"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaGithub className="hover:text-blue-500" />
+            </a>
+            <a
+              href="https://twitter.com/your-profile"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaTwitter className="hover:text-blue-500" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
