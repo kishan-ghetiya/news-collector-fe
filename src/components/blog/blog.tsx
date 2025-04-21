@@ -69,7 +69,7 @@ export default function BlogSection() {
   }, [transformArticles]);
 
   return (
-    <section className="py-16 bg-[#dce6f6] opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
+    <section className="py-16 pb-40 bg-[#dce6f6] opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogData.map((item, index) => (

@@ -60,7 +60,7 @@ const MixedSection = () => {
   }, []);
 
   return (
-    <section className="py-16 bg-[#dce6f6] opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
+    <section className="py-16 pb-32 bg-[#dce6f6] opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
       <div className="container mx-auto px-4">
         {/* Section Title */}
         <div className="text-center mb-12 flex items-center">

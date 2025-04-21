@@ -53,7 +53,7 @@ export default function CategoriesSection() {
   }, []);
 
   return (
-    <section className="bg-[#dce6f6] py-10 opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
+    <section className="bg-[#dce6f6] py-10 pb-44 opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-6">
           {categoryData?.map((category, index) => (
