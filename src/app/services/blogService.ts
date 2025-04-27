@@ -1,9 +1,16 @@
+import { CreatePostRequest } from "@/types";
 import { Blog, BlogListResponse } from "@/types/blog";
 import apiClient from "../lib/apiClient";
 
 export const blogService = {
-  addBlog: (data: Omit<Blog, "id" | "createdAt">) =>
-    apiClient<Blog>("blog/create", {
+  addBlog: (data: CreatePostRequest) =>
+    apiClient<{
+      title: string;
+      link: string;
+      tags: string[];
+      category: string;
+      summary: string;
+    }>("blog/create", {
       method: "POST",
       body: data,
     }),

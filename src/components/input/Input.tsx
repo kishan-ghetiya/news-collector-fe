@@ -1,6 +1,6 @@
+import clsx from "clsx";
 import { ChangeEvent, forwardRef, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import clsx from "clsx";
 
 interface InputProps {
   label: string;
@@ -13,6 +13,7 @@ interface InputProps {
   error?: string;
   variant?: "underline" | "solid";
   disbaled?: boolean;
+  required?: boolean;
 }
 
 export const Input = forwardRef<
@@ -31,6 +32,7 @@ export const Input = forwardRef<
       error,
       variant = "underline",
       disbaled = false,
+      required = false, // Default to false
       ...rest
     },
     ref
@@ -61,6 +63,7 @@ export const Input = forwardRef<
             className="block text-sm font-medium text-gray-700"
           >
             {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
           </label>
         )}
 
@@ -75,6 +78,7 @@ export const Input = forwardRef<
             ref={ref as React.Ref<HTMLTextAreaElement>}
             className={inputClasses}
             disabled={disbaled}
+            required={required}
             {...rest}
           />
         ) : type === "password" ? (
@@ -89,6 +93,7 @@ export const Input = forwardRef<
               ref={ref as React.Ref<HTMLInputElement>}
               className={clsx(inputClasses, "pr-10")}
               disabled={disbaled}
+              required={required}
               {...rest}
             />
             <button
@@ -111,6 +116,7 @@ export const Input = forwardRef<
             ref={ref as React.Ref<HTMLInputElement>}
             className={inputClasses}
             disabled={disbaled}
+            required={required}
             {...rest}
           />
         )}

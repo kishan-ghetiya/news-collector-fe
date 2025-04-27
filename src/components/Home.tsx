@@ -1,15 +1,15 @@
 "use client";
+import { blogService } from "@/app/services";
+import { categoryService } from "@/app/services/categoryService";
+import { BlogItem, RawArticle } from "@/types";
 import Image from "next/image";
-import LatestBlogSection from "./blog/latestblog";
-import BlogCardSection from "./blog/blogCard";
-import CategoryMarquee from "./category/categoryMarquee";
+import { useEffect, useState } from "react";
 import ArticlesSection from "./articles/articles";
+import BlogCardSection from "./blog/blogCard";
+import LatestBlogSection from "./blog/latestblog";
+import CategoryMarquee from "./category/categoryMarquee";
 import LatestNewsCategory from "./category/latestNews";
 import MixedSection from "./post/post";
-import { useEffect, useState } from "react";
-import { blogService } from "@/app/services";
-import { BlogItem, RawArticle } from "./blog/blog";
-import { categoryService } from "@/app/services/categoryService";
 
 export interface CategoryItem {
   id: string;
@@ -52,25 +52,22 @@ export default function HomeCategories() {
 
     const fetchData = async () => {
       try {
-        const data = await blogService.getBlogList(1, 6); // Replace with your actual async call
+        const data = await blogService.getBlogList(1, 6);
         const blogData = addImageToArticles(data?.results);
         setBlogData(blogData);
-        // Do something with the data
       } catch (error) {
         console.error("Error fetching data:", error);
       }
 
       try {
-        const data = await categoryService.getCategoryList(1, 8); // Replace with your actual async call
+        const data = await categoryService.getCategoryList(1, 8);
         const categoryData = addImageToArticles(data?.results);
         setCategoryData(categoryData);
-        // Do something with the data
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-    // Cleanup observer on component unmount
     return () => {
       elements.forEach((el) => observer.unobserve(el));
     };
