@@ -39,7 +39,7 @@ export const Input = forwardRef<
   ) => {
     const [showPassword, setShowPassword] = useState(false);
 
-    const baseClasses = "w-full focus:outline-none py-2";
+    const baseClasses = "w-full focus:outline-none py-4";
     const inputClasses = clsx(
       baseClasses,
       variant === "underline" &&
@@ -99,7 +99,7 @@ export const Input = forwardRef<
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
               tabIndex={-1}
             >
               {showPassword ? <FiEyeOff /> : <FiEye />}

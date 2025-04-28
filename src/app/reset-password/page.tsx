@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import Joi from "joi";
@@ -9,7 +10,6 @@ import Button from "@/components/ui/Button";
 import { authService } from "@/app/services";
 import toast from "react-hot-toast";
 import FormContainer from "@/components/ui/FormContainer";
-import { useState } from "react";
 
 interface ResetForm {
   password: string;
@@ -33,7 +33,7 @@ const schema = Joi.object<ResetForm>({
     }),
 });
 
-const ResetPasswordPage = () => {
+const ResetPasswordPageContent = () => {
   const params = useSearchParams();
   const router = useRouter();
   const token = params.get("token");
@@ -92,6 +92,14 @@ const ResetPasswordPage = () => {
         </Button>
       </form>
     </FormContainer>
+  );
+};
+
+const ResetPasswordPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPasswordPageContent />
+    </Suspense>
   );
 };
 

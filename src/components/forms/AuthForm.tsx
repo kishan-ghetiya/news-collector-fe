@@ -164,7 +164,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
             <Button
               type="button"
               variant="outline"
-              className="w-full"
+              className="w-full !mt-11"
               onClick={handleResendVerification}
               loading={isLoading === "sendEmail"}
             >
@@ -176,7 +176,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
 
       <Button
         type="submit"
-        className="w-full"
+        className="w-full !mt-11"
         variant="primary"
         loading={isLoading === "register"}
       >

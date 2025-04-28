@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaLock, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
-import NewsCollectorLogo from "./icons/NewsCollectorLogo";
 import Button from "./ui/Button";
+import Image from "next/image";
 
 const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -38,12 +38,14 @@ const Header: React.FC = () => {
       <div className="container mx-auto mt-14 px-4">
         <div className="flex items-center justify-between h-20 shadow-lg bg-white rounded-xl px-4 sm:px-6 lg:px-8 transition-all duration-300 hover:shadow-xl">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 transition-transform duration-300 group-hover:scale-105">
-              <NewsCollectorLogo />
-            </div>
-            <div className="flex flex-col leading-tight">
-              <span className="text-base font-bold text-gray-900">News</span>
-              <span className="text-base text-purple-700">Collector</span>
+            <div className=" transition-transform duration-300 group-hover:scale-105">
+              <Image
+                height={200}
+                width={200}
+                src="/news_collector_logo.png"
+                alt="News Collector Logo"
+                className="size-24 max-w-full"
+              />
             </div>
           </Link>
 
