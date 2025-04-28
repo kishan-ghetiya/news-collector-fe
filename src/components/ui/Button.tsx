@@ -16,14 +16,15 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const variants = {
-    primary: "bg-purple text-white hover:bg-purple-800",
-    outline: "border-2 border-purple text-purple hover:bg-purple-50",
+    primary:
+      "bg-gradient-to-r from-purple via-indigo-500 to-blue-500 text-white hover:bg-purple-800",
+    outline: "border border-purple text-purple hover:bg-purple-50",
     danger: "bg-danger text-white hover:bg-danger-600",
   };
 
   return (
     <button
-      className={`px-6 py-2 rounded-lg font-medium transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-60 ${variants[variant]} ${className} ${disabled || loading ? "hover:cursor-not-allowed" : ""}`}
+      className={`px-6 py-4 rounded-full font-medium transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-60 ${variants[variant]} ${className} ${disabled || loading ? "hover:cursor-not-allowed" : ""}`}
       disabled={disabled || loading}
       {...props}
     >

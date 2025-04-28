@@ -89,7 +89,7 @@ export default function AboutAndAuthors() {
       </section>
 
       {/* Authors Section */}
-      <section className="bg-blue-100 py-16">
+      <section className="bg-blue-100 py-16 pb-40">
         <div className="max-w-6xl mx-auto px-4">
           <div className="mb-10 text-center">
             <Image

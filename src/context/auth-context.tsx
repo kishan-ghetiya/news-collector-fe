@@ -1,7 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { authService } from "@/app/services";
+import { authService, userService } from "@/app/services";
+import { deleteCookie, getCookie } from "@/components/utils";
+import { ApiError } from "@/types/auth";
 import { User } from "@/types/user";
+import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -15,20 +19,18 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const initializeUser = async () => {
-      const refreshToken = localStorage.getItem("refreshToken");
-      if (!refreshToken) return;
+      const userId = getCookie("userId");
+      if (!userId) return;
 
       try {
-        const response = await authService.refreshTokens(refreshToken);
-        localStorage.setItem("accessToken", response.tokens.access.token);
-        localStorage.setItem("refreshToken", response.tokens.refresh.token);
-        localStorage.setItem("user", JSON.stringify(response.user));
-        setUser(response.user);
-      } catch (error) {
-        toast.error(error?.message || "Token refresh failed");
+        const response = await userService.getUserById(userId);
+        setUser(response);
+      } catch (error: unknown) {
+        toast.error((error as ApiError)?.message || "Failed to load user");
         handleLogout();
       }
     };
@@ -37,15 +39,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const handleLogout = async () => {
-    const refreshToken = localStorage.getItem("refreshToken");
+    const refreshToken = getCookie("refreshToken");
     if (refreshToken) {
       try {
         await authService.logout(refreshToken);
+        router.push("/");
       } catch (err) {
         console.error("Logout error", err);
       }
     }
-    localStorage.clear();
+    deleteCookie("accessToken");
+    deleteCookie("refreshToken");
+    deleteCookie("userId");
     setUser(null);
   };
 

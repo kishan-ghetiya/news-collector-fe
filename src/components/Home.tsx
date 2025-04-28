@@ -1,25 +1,37 @@
 "use client";
+import { blogService } from "@/app/services";
+import { categoryService } from "@/app/services/categoryService";
+import { BlogItem, RawArticle } from "@/types";
 import Image from "next/image";
-import LatestBlogSection from "./blog/latestblog";
-import BlogCardSection from "./blog/blogCard";
-import CategoryMarquee from "./category/categoryMarquee";
+import { useEffect, useState } from "react";
 import ArticlesSection from "./articles/articles";
+import BlogCardSection from "./blog/blogCard";
+import LatestBlogSection from "./blog/latestblog";
+import CategoryMarquee from "./category/categoryMarquee";
 import LatestNewsCategory from "./category/latestNews";
 import MixedSection from "./post/post";
-import { useEffect } from "react";
 
-const categories = [
-  { name: "Entertainment", img: "/post16.jpg" },
-  { name: "Nature", img: "/post21.jpg" },
-  { name: "Gaming", img: "/post24.jpg" },
-  { name: "Business", img: "/post25.jpg" },
-  { name: "Science", img: "/post1.jpg" },
-  { name: "Education", img: "/post11.jpg" },
-  { name: "Sport", img: "/post2.jpg" },
-  { name: "Travel", img: "/post4.jpg" },
-];
+export interface CategoryItem {
+  id: string;
+  category?: string;
+  readingTime?: string;
+  title: string;
+  image?: string;
+  tags?: string[];
+  name?: string;
+}
 
 export default function HomeCategories() {
+  const [blogData, setBlogData] = useState<BlogItem[]>();
+  const [categoryData, setCategoryData] = useState<CategoryItem[]>();
+
+  const addImageToArticles = (articles: RawArticle[]) => {
+    return articles?.map((article) => ({
+      ...article,
+      image: `/post16.jpg`,
+    }));
+  };
+
   useEffect(() => {
     const elements = document.querySelectorAll(".scroll-fade-in");
     const observer = new IntersectionObserver(
@@ -38,7 +50,24 @@ export default function HomeCategories() {
 
     elements.forEach((el) => observer.observe(el));
 
-    // Cleanup observer on component unmount
+    const fetchData = async () => {
+      try {
+        const data = await blogService.getBlogList(1, 6);
+        const blogData = addImageToArticles(data?.results);
+        setBlogData(blogData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+
+      try {
+        const data = await categoryService.getCategoryList(1, 8);
+        const categoryData = addImageToArticles(data?.results);
+        setCategoryData(categoryData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
     return () => {
       elements.forEach((el) => observer.unobserve(el));
     };
@@ -47,15 +76,15 @@ export default function HomeCategories() {
   return (
     <section className="py-12 ">
       <div className="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-6 opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
-        {categories.map((category, index) => (
+        {categoryData?.map((category, index) => (
           <a
             key={index}
             href="/category.html"
             className="relative group block overflow-hidden rounded-xl shadow-md transition-transform duration-300 transform hover:scale-105 border-8 border-white"
           >
             <Image
-              src={category.img}
-              alt={category.name}
+              src={category.image ?? ""}
+              alt={category?.title ?? ""}
               height={192}
               width={256}
               loading="lazy"
@@ -63,7 +92,7 @@ export default function HomeCategories() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10 rounded-xl" />
             <div className="absolute bottom-4 left-2 z-20 text-white font-normal text-lg">
-              {category.name}
+              {category?.name}
             </div>
             <Image
               src="/readmore.png"
@@ -79,7 +108,7 @@ export default function HomeCategories() {
 
       <LatestBlogSection />
 
-      <BlogCardSection />
+      <BlogCardSection blogData={blogData} />
 
       <CategoryMarquee />
 

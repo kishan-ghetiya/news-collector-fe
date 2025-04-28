@@ -1,47 +1,17 @@
 // components/BlogSection.tsx
 import Image from "next/image";
 
-type BlogCard = {
-  image: string;
-  category: string;
-  readTime: string;
-  title: string;
-  link: string;
-};
-
-const blogData: BlogCard[] = [
-  {
-    image: "/post16.jpg",
-    category: "Entertainment",
-    readTime: "5 min Read",
-    title: "Laugh Lounge: Comedy Capers and Chuckles",
-    link: "/singleblog",
-  },
-  {
-    image: "/post21.jpg",
-    category: "Nature",
-    readTime: "5 min Read",
-    title: "Oceans Unexplored: Secrets of the Deep",
-    link: "/singleblog",
-  },
-  {
-    image: "/post24.jpg",
-    category: "Gaming",
-    readTime: "5 min Read",
-    title: "Console Corner: Exploring Gaming Platforms",
-    link: "/singleblog",
-  },
-];
-
-const BlogCardSection = () => {
+const BlogCardSection = ({ blogData }) => {
   return (
     <section className="bg-[#dce6f6] py-10 pb-40 opacity-0 translate-y-10 transition-all duration-700 ease-in-out scroll-fade-in">
       <div className="container mx-auto px-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {blogData.map((blog, index) => (
+        {blogData?.map((blog, index) => (
           <a
             key={index}
             href={blog.link}
             className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <div className="relative w-full h-56">
               <Image
@@ -52,11 +22,18 @@ const BlogCardSection = () => {
               />
             </div>
             <div className="p-5">
-              <div className="flex items-center gap-3 text-sm mb-3">
-                <span className="bg-black text-white px-2 py-0.5 rounded font-semibold uppercase text-xs">
-                  {blog.category}
+              <div className="flex flex-wrap items-center gap-3 mb-3">
+                {blog?.tags?.map((item, index) => (
+                  <span
+                    className="bg-black text-white text-xs px-3 py-1 rounded-full uppercase"
+                    key={index}
+                  >
+                    {item ?? "General"}
+                  </span>
+                ))}
+                <span className="text-sm text-gray-500">
+                  {blog.readingTime}
                 </span>
-                <span className="text-gray-500">{blog.readTime}</span>
               </div>
               <h4 className="text-lg font-semibold text-gray-900 leading-snug">
                 {blog.title}

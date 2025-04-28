@@ -1,23 +1,20 @@
 "use client";
 
-import { ChangeEvent, FC, useState } from "react";
-import { ContactUsPayload } from "@/types/contact";
-import Joi from "joi";
-import { useForm } from "react-hook-form";
-import { joiResolver } from "@hookform/resolvers/joi";
 import { contactUs } from "@/app/services";
+import { ContactUsPayload } from "@/types/contact";
+import { joiResolver } from "@hookform/resolvers/joi";
+import Joi from "joi";
+import { FC, useState } from "react";
+import { useForm } from "react-hook-form";
 import { Input } from "../input/Input";
-// import { Input } from "../input/Input";
+import { ApiError } from "@/types/auth";
 
-interface FormData extends ContactUsPayload {}
-
-// Form Component with dynamic input
 export const ContactForm: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const schema = Joi.object<FormData>({
+  const schema = Joi.object<ContactUsPayload>({
     email: Joi.string()
       .email({ tlds: { allow: false } })
       .required()
@@ -26,43 +23,40 @@ export const ContactForm: FC = () => {
         "string.empty": "Email is required",
         "any.required": "Email is required",
       }),
-  
-    name: Joi.string()
-      .required()
-      .messages({
-        "string.empty": "Name is required",
-        "any.required": "Name is required",
-      }),
-  
-    message: Joi.string()
-      .required()
-      .messages({
-        "string.empty": "Message is required",
-        "any.required": "Message is required",
-      }),
+
+    name: Joi.string().required().messages({
+      "string.empty": "Name is required",
+      "any.required": "Name is required",
+    }),
+
+    message: Joi.string().required().messages({
+      "string.empty": "Message is required",
+      "any.required": "Message is required",
+    }),
   });
-  
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<FormData>({
+  } = useForm<ContactUsPayload>({
     resolver: joiResolver(schema),
   });
 
-  const onSubmit = async (formData: FormData) => {
+  const onSubmit = async (formData: ContactUsPayload) => {
     setIsLoading(true);
     setApiError(null);
     setSuccessMessage(null);
 
     try {
-      const response = await contactUs.contactus(formData);
+      await contactUs.contactus(formData);
       setSuccessMessage("Your message has been sent successfully!");
-      reset(); // clear the form after success
-    } catch (error: any) {
-      setApiError(error?.message || "An unexpected error occurred");
+      reset();
+    } catch (error: unknown) {
+      setApiError(
+        (error as ApiError)?.message || "An unexpected error occurred"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -85,13 +79,7 @@ export const ContactForm: FC = () => {
         {...register("name")}
         error={errors.name?.message}
       />
-      {/* You can keep this city field if needed, but it’s not in the schema */}
-      {/* <Input
-        label=""
-        type="text"
-        name="city"
-        placeholder="Enter your city"
-      /> */}
+
       <Input
         label=""
         type="email"

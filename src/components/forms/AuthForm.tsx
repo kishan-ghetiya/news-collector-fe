@@ -1,7 +1,12 @@
 "use client";
 import { authService } from "@/app/services";
 import { useAuth } from "@/context/auth-context";
-import { LoginPayload, RegisterPayload } from "@/types/auth";
+import {
+  ApiError,
+  getErrorMessage,
+  LoginPayload,
+  RegisterPayload,
+} from "@/types/auth";
 import { joiResolver } from "@hookform/resolvers/joi";
 import Joi from "joi";
 import { useRouter } from "next/navigation";
@@ -10,6 +15,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Input } from "../input/Input";
 import Button from "../ui/Button";
+import { handleSetCookie } from "../utils";
 
 interface AuthFormProps {
   type: "login" | "register";
@@ -70,24 +76,30 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
     try {
       if (type === "login") {
         const response = await authService.login(formData);
-
-        localStorage.setItem("accessToken", response.tokens.access.token);
-        localStorage.setItem("refreshToken", response.tokens.refresh.token);
-
+        await handleSetCookie({
+          name: "accessToken",
+          value: response.tokens.access.token,
+        });
+        await handleSetCookie({
+          name: "refreshToken",
+          value: response.tokens.refresh.token,
+        });
+        await handleSetCookie({
+          name: "userId",
+          value: response.user?.id,
+        });
         setUser(response.user);
         handleAuthSuccess();
       } else {
         await authService.register(formData as RegisterPayload);
         handleAuthSuccess();
       }
-    } catch (error: any) {
-      const cause = error?.cause;
-
-      if (cause?.isRegistered === false) {
+    } catch (error: unknown) {
+      if ((error as ApiError)?.cause?.isRegistered === false) {
         setIsRegistered(false);
       }
 
-      setApiError(error?.message || "An unexpected error occurred");
+      setApiError(getErrorMessage(error));
     } finally {
       setIsLoading(null);
     }
@@ -103,9 +115,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
       await authService.sendVerificationEmail(email);
       toast.success("Verification email sent. Please check your inbox.");
       router.push(`/verify-email?email=${email}`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setApiError(
-        error?.message || "Failed to resend verification email. Try again."
+        (error as ApiError)?.message ||
+          "Failed to resend verification email. Try again."
       );
     } finally {
       setIsLoading(null);
@@ -151,7 +164,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
             <Button
               type="button"
               variant="outline"
-              className="w-full"
+              className="w-full !mt-11"
               onClick={handleResendVerification}
               loading={isLoading === "sendEmail"}
             >
@@ -163,7 +176,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type = "login" }) => {
 
       <Button
         type="submit"
-        className="w-full"
+        className="w-full !mt-11"
         variant="primary"
         loading={isLoading === "register"}
       >
