@@ -61,7 +61,7 @@ const ForgotPasswordPage = () => {
           type="submit"
           variant="primary"
           loading={isLoading}
-          className="w-full"
+          className="w-full !mt-11"
         >
           Send Reset Link
         </Button>

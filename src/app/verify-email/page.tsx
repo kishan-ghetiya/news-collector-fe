@@ -5,9 +5,9 @@ import { Input } from "@/components/input/Input";
 import Button from "@/components/ui/Button";
 import { getErrorMessage } from "@/types/auth";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
-const VerifyEmailPage: React.FC = () => {
+const VerifyEmailPageContent: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
@@ -62,7 +62,7 @@ const VerifyEmailPage: React.FC = () => {
 
   return (
     <div className="mx-5">
-      <div className="max-w-md mx-auto mt-10 space-y-6 p-6 border rounded-xl shadow-lg bg-white">
+      <div className="max-w-md mx-auto mt-20 space-y-6 p-6 border rounded-xl shadow-lg bg-white">
         <h1 className="text-xl font-bold text-center">Verify Your Email</h1>
 
         {timeLeft !== null && !success && (
@@ -108,6 +108,14 @@ const VerifyEmailPage: React.FC = () => {
         )}
       </div>
     </div>
+  );
+};
+
+const VerifyEmailPage: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyEmailPageContent />
+    </Suspense>
   );
 };
 

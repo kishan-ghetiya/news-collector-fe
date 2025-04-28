@@ -28,7 +28,7 @@ export default function LayoutWrapper({
       <AuthProvider>
         <Toaster position="top-right" />
         <RedirectRoute>
-          {showLayout && <Header />}
+          <Header />
           {children}
           {showLayout && <Footer />}
         </RedirectRoute>
