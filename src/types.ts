@@ -47,3 +47,24 @@ export interface BlogItem {
   image?: string;
   tags?: string[];
 }
+
+export interface CategoryObj {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  parentCategory: string | null;
+  isActive: boolean;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  updatedBy?: string;
+}
+
+export interface CategoryResponse {
+  results: CategoryObj[];
+  page: number;
+  limit: number;
+  totalPages: number;
+  totalResults: number;
+}
